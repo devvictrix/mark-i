@@ -29,6 +29,9 @@ Modularity refers to designing the system as a set of distinct, independent, and
 *   **Action:** If a class or module handles too many unrelated tasks, consider splitting it.
 
 ### 2.2. File and Class Size
+*   **Definition: Lines of Code (LOC)**
+    Lines of Code (LOC) is a software metric that quantifies the size of a program by counting the number of lines in its source code. In this project, when referring to file size, we primarily consider **Physical LOC**, which includes all lines (code, comments, blank lines). While a simple metric, it serves as a useful heuristic to identify potentially overly complex or multi-responsible files/classes that may warrant closer inspection for refactoring. It does not, however, directly reflect code quality or complexity.
+
 *   **Guideline:** Avoid overly large files and classes. Large components are often a symptom of SRP violations and are harder to understand, test, and maintain.
 *   **File Size Heuristic:** Aim for Python files (`.py`) to ideally be under **500-700 lines of code (LoC)**, excluding comments and blank lines. This is a soft guideline; if a file exceeds this, it should trigger a review to see if it can be logically decomposed.
 *   **Class Size Heuristic:** Classes should also be focused. If a class has too many methods (e.g., >15-20, context-dependent) or an excessive number of instance variables, consider if it can be broken down or if some responsibilities can be delegated to helper classes.

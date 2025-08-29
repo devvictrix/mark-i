@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, List, Any, Optional # Added this line
+from typing import Dict, List, Any, Optional  # Added this line
 
 # Use __name__ for module-level logger for better organization if this module grows.
 # For now, simple print or direct APP_ROOT_LOGGER_NAME if complex logging needed here.
@@ -9,7 +9,7 @@ from typing import Dict, List, Any, Optional # Added this line
 
 
 # --- Constants ---
-DEFAULT_PROFILE_STRUCTURE: Dict[str, Any] = { # Added type hint
+DEFAULT_PROFILE_STRUCTURE: Dict[str, Any] = {  # Added type hint
     "profile_description": "New Profile",
     "settings": {
         "monitoring_interval_seconds": 1.0,
@@ -79,7 +79,7 @@ GEMINI_TASK_ALLOWED_PRIMITIVE_ACTIONS_FOR_UI_HINT: List[str] = [
 #   "default": default_value,                        // Default value for this parameter
 #   "required": True | False,                        // Is this parameter mandatory?
 #   "placeholder": "Hint text for entry/textbox",    // Optional
-#   "allow_empty_string": True | False,              // For string types, if empty is valid (even if required)
+#   "allow_empty_string": True | False,              // For string types, if "" is a valid value (even if required)
 #   "min_val": number, "max_val": number,            // For numeric types
 #   "options_source": "regions" | "templates",      // For optionmenu_dynamic
 #   "options_const_key": "KEY_IN_OPTIONS_CONST_MAP", // For optionmenu_static
