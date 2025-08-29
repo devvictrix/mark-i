@@ -146,13 +146,28 @@ class MainAppWindow(ctk.CTk):
         self.details_panel_instance.grid(row=0, column=2, sticky="nsew", padx=(1, 0), pady=0)
 
     def _setup_left_panel_content(self):
-        # Unchanged
+        """
+        Sets up the content of the left panel, now using a CTkTabview for
+        better organization of Settings, Regions, and Templates.
+        """
+        self.left_panel.grid_rowconfigure(0, weight=1)
         self.left_panel.grid_columnconfigure(0, weight=1)
-        current_row_lp = 0
-        pif_frame = ctk.CTkFrame(self.left_panel, fg_color="transparent")
-        pif_frame.grid(row=current_row_lp, column=0, sticky="new", padx=10, pady=(10, 5))
+
+        # --- Create Tabview ---
+        tab_view = ctk.CTkTabview(self.left_panel)
+        tab_view.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+
+        settings_tab = tab_view.add("Settings")
+        regions_tab = tab_view.add("Regions")
+        templates_tab = tab_view.add("Templates")
+
+        # --- Populate Settings Tab ---
+        settings_tab.grid_columnconfigure(0, weight=1)
+
+        pif_frame = ctk.CTkFrame(settings_tab, fg_color="transparent")
+        pif_frame.grid(row=0, column=0, sticky="new", padx=5, pady=5)
         pif_frame.grid_columnconfigure(1, weight=1)
-        current_row_lp += 1
+
         ctk.CTkLabel(pif_frame, text="Profile Path:", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, columnspan=2, sticky="w", padx=5, pady=(0, 0))
         self.label_current_profile_path = ctk.CTkLabel(pif_frame, text="Path: New Profile (unsaved)", anchor="w", wraplength=300, font=ctk.CTkFont(size=11))
         self.label_current_profile_path.grid(row=1, column=0, columnspan=2, padx=5, pady=(0, 10), sticky="ew")
@@ -184,37 +199,31 @@ class MainAppWindow(ctk.CTk):
         self.label_gemini_api_key_status = ctk.CTkLabel(pif_frame, text=self._check_gemini_api_key_status(), anchor="w")
         self.label_gemini_api_key_status.grid(row=8, column=1, padx=5, pady=2, sticky="ew")
 
-        regions_outer_frame = ctk.CTkFrame(self.left_panel)
-        regions_outer_frame.grid(row=current_row_lp, column=0, sticky="nsew", padx=10, pady=(5, 5))
-        current_row_lp += 1
-        regions_outer_frame.grid_columnconfigure(0, weight=1)
-        regions_outer_frame.grid_rowconfigure(1, weight=1)
-        ctk.CTkLabel(regions_outer_frame, text="Screen Regions", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, pady=(0, 5), sticky="w", padx=5)
-        self.regions_list_scroll_frame = ctk.CTkScrollableFrame(regions_outer_frame, label_text="", fg_color=("gray95", "gray22"))
-        self.regions_list_scroll_frame.grid(row=1, column=0, sticky="nsew", padx=5)
-        region_buttons_frame = ctk.CTkFrame(regions_outer_frame, fg_color="transparent")
-        region_buttons_frame.grid(row=2, column=0, pady=(5, 0), sticky="ew", padx=5)
+        # --- Populate Regions Tab ---
+        regions_tab.grid_columnconfigure(0, weight=1)
+        regions_tab.grid_rowconfigure(1, weight=1)
+
+        ctk.CTkLabel(regions_tab, text="Screen Regions", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, pady=(5, 5), sticky="w", padx=5)
+        self.regions_list_scroll_frame = ctk.CTkScrollableFrame(regions_tab, label_text="", fg_color=("gray95", "gray22"))
+        self.regions_list_scroll_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=(0, 5))
+        region_buttons_frame = ctk.CTkFrame(regions_tab, fg_color="transparent")
+        region_buttons_frame.grid(row=2, column=0, pady=(5, 5), sticky="ew", padx=5)
         ctk.CTkButton(region_buttons_frame, text="Add Region", width=100, command=self._add_region).pack(side="left", padx=(0, 5))
         self.btn_remove_region = ctk.CTkButton(region_buttons_frame, text="Remove Selected", width=120, command=self._remove_selected_region, state="disabled")
         self.btn_remove_region.pack(side="left", padx=5)
 
-        templates_outer_frame = ctk.CTkFrame(self.left_panel)
-        templates_outer_frame.grid(row=current_row_lp, column=0, sticky="nsew", padx=10, pady=(5, 10))
-        current_row_lp += 1
-        templates_outer_frame.grid_columnconfigure(0, weight=1)
-        templates_outer_frame.grid_rowconfigure(1, weight=1)
-        ctk.CTkLabel(templates_outer_frame, text="Image Templates", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, pady=(0, 5), sticky="w", padx=5)
-        self.templates_list_scroll_frame = ctk.CTkScrollableFrame(templates_outer_frame, label_text="", fg_color=("gray95", "gray22"))
-        self.templates_list_scroll_frame.grid(row=1, column=0, sticky="nsew", padx=5)
-        template_buttons_frame = ctk.CTkFrame(templates_outer_frame, fg_color="transparent")
-        template_buttons_frame.grid(row=2, column=0, pady=(5, 0), sticky="ew", padx=5)
+        # --- Populate Templates Tab ---
+        templates_tab.grid_columnconfigure(0, weight=1)
+        templates_tab.grid_rowconfigure(1, weight=1)
+
+        ctk.CTkLabel(templates_tab, text="Image Templates", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, pady=(5, 5), sticky="w", padx=5)
+        self.templates_list_scroll_frame = ctk.CTkScrollableFrame(templates_tab, label_text="", fg_color=("gray95", "gray22"))
+        self.templates_list_scroll_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=(0, 5))
+        template_buttons_frame = ctk.CTkFrame(templates_tab, fg_color="transparent")
+        template_buttons_frame.grid(row=2, column=0, pady=(5, 5), sticky="ew", padx=5)
         ctk.CTkButton(template_buttons_frame, text="Add Template", width=100, command=self._add_template).pack(side="left", padx=(0, 5))
         self.btn_remove_template = ctk.CTkButton(template_buttons_frame, text="Remove Selected", width=120, command=self._remove_selected_template, state="disabled")
         self.btn_remove_template.pack(side="left", padx=5)
-
-        self.left_panel.grid_rowconfigure(0, weight=0)
-        self.left_panel.grid_rowconfigure(1, weight=1)
-        self.left_panel.grid_rowconfigure(2, weight=1)
 
     def _setup_center_panel_content(self):
         # Unchanged

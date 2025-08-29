@@ -29,6 +29,9 @@ from mark_i.ui.gui.generation.views.final_review_view import FinalReviewView
 
 from mark_i.core.logging_setup import APP_ROOT_LOGGER_NAME
 
+# Import constants from the new central location
+from mark_i.ui.gui.gui_config import FONT_PATH_PRIMARY, FONT_PATH_FALLBACK
+
 logger = logging.getLogger(f"{APP_ROOT_LOGGER_NAME}.ui.gui.generation.profile_creation_wizard")
 
 # Page Constants (renamed for clarity with new structure)
@@ -37,13 +40,6 @@ WIZARD_PAGE_PLAN_REVIEW = 1
 WIZARD_PAGE_DEFINE_REGION = 2
 WIZARD_PAGE_DEFINE_LOGIC = 3
 WIZARD_PAGE_FINAL_REVIEW_SAVE = 4
-
-WIZARD_SCREENSHOT_PREVIEW_MAX_WIDTH = 600
-WIZARD_SCREENSHOT_PREVIEW_MAX_HEIGHT = 380
-CANDIDATE_BOX_COLORS = ["#FF00FF", "#00FFFF", "#FFFF00", "#F08080", "#90EE90", "#ADD8E6", "#FFC0CB", "#E6E6FA"]
-SELECTED_CANDIDATE_BOX_COLOR = "lime green"
-FONT_PATH_PRIMARY = "arial.ttf"  # To be moved to gui_config or similar
-FONT_PATH_FALLBACK = "DejaVuSans.ttf"  # To be moved to gui_config or similar
 
 
 class ProfileCreationWizardWindow(ctk.CTkToplevel):

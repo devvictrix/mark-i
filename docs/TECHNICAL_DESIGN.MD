@@ -394,3 +394,44 @@ A modal `ctk.CTkToplevel` window (`mark_i.ui.gui.generation.profile_creation_wiz
 - Loading indicators/messages during long Gemini calls (handled via `threading` and GUI callbacks).
 
 ---
+## 16. vFuture GUI Enhancement Strategy (Design Phase)
+
+This section outlines the strategy for the `vFuture` development cycle, focusing on the "Super Enhance the GUI" goal from the `FEATURE_ROADMAP.MD`.
+
+### 16.1. Core Principles
+
+The GUI refinement will be guided by the following principles to ensure a more effective and user-friendly experience:
+
+1.  **Clarity over Density:** Prioritize clean, uncluttered layouts. Avoid overwhelming the user with too many options at once. Use progressive disclosure to reveal advanced settings.
+2.  **Guided Workflows:** The UI should naturally guide the user through the process of creating or editing a profile. The next logical action should always be clear.
+3.  **Visual Feedback (Show, Don't Tell):** Whenever possible, provide immediate visual feedback for user actions. This is the core of features like "Real-time Visual Feedback".
+4.  **Consistency:** Maintain a consistent design language, layout structure, and terminology across all UI components, including the main editor and the AI wizard.
+5.  **Reduced Cognitive Load:** Simplify complex configuration tasks. For example, make the relationship between rules, regions, and templates more visually intuitive.
+
+### 16.2. Target Areas for Initial Refinement
+
+The initial focus will be on the existing `MainAppWindow` and `ProfileCreationWizardWindow`, as they are the primary user touchpoints.
+
+1.  **`MainAppWindow` Layout & Organization:**
+    *   **Left Panel:** The current single-column layout for settings, regions, and templates can become very long. Propose refactoring this into a `CTkTabview` with three tabs: "Settings", "Regions", and "Templates". This will neaten the interface and reduce scrolling.
+    *   **Center Panel (Rules):** The simple list of rule names is functional but could be more informative. Consider adding a small icon or color-coding to indicate the rule's action type (e.g., a mouse icon for `click`, a keyboard for `type_text`).
+    *   **Details Panel (`DetailsPanel`):** This is the most complex area. The dynamic rendering is powerful but can be confusing.
+        *   Improve visual grouping of parameters with headers or collapsible sections.
+        *   Make the workflow for creating/editing compound conditions more intuitive, perhaps with a more visual tree-like structure in the `ConditionEditorComponent`.
+        *   Improve the visibility and workflow for using captured variables from conditions in actions.
+
+2.  **`ProfileCreationWizardWindow` Flow & Clarity:**
+    *   **Feedback:** Enhance the visual feedback at each stage. For example, after a region is defined, keep a small thumbnail of it visible while defining the logic.
+    *   **Guidance:** Add more in-UI tooltips and brief descriptive texts to explain concepts like "target relation" or "min confidence" to new users.
+    *   **Flexibility:** While the step-by-step process is good, consider allowing users to more easily jump back to a specific previous step (e.g., "Back to Plan Review") without losing all subsequent work. This requires more robust state management.
+
+### 16.3. Implementation Approach
+
+The GUI enhancement will be an iterative process:
+
+1.  **Phase 1 (Layout Refactoring):** Start by implementing the `CTkTabview` in the `MainAppWindow`'s left panel. This is a non-destructive change that immediately improves organization.
+2.  **Phase 2 (Details Panel Improvements):** Focus on improving the layout and clarity of the `DetailsPanel`, starting with better visual grouping of parameters.
+3.  **Phase 3 (Wizard Refinements):** Implement the enhanced feedback and guidance features in the `ProfileCreationWizardWindow`.
+4.  **Phase 4 (Advanced Features):** Once the existing UI is more robust and user-friendly, begin development on the more complex new features like "Real-time Visual Feedback" and the "GUI-based Bot Runner".
+
+A new ADR will be created if any of these changes require significant shifts in the underlying UI architecture or state management logic.

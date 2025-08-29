@@ -12,11 +12,13 @@ import cv2
 
 from mark_i.ui.gui.generation.wizard_state import WizardState
 from mark_i.generation.profile_generator import ProfileGenerator
+# This import is the fix for the NameError
+from mark_i.generation.strategy_planner import IntermediatePlanStep
 from mark_i.engines.capture_engine import CaptureEngine
 from mark_i.ui.gui.region_selector import RegionSelectorWindow
 
-# from mark_i.ui.gui.gui_config import DEFAULT_REGION_STRUCTURE # Removed from gui_config
-from mark_i.ui.gui.generation.profile_creation_wizard import WIZARD_SCREENSHOT_PREVIEW_MAX_WIDTH, WIZARD_SCREENSHOT_PREVIEW_MAX_HEIGHT, SELECTED_CANDIDATE_BOX_COLOR  # Import constants
+# Import constants from the new central location
+from mark_i.ui.gui.gui_config import WIZARD_SCREENSHOT_PREVIEW_MAX_WIDTH, WIZARD_SCREENSHOT_PREVIEW_MAX_HEIGHT, SELECTED_CANDIDATE_BOX_COLOR
 
 from mark_i.core.logging_setup import APP_ROOT_LOGGER_NAME
 

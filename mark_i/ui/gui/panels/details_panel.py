@@ -13,8 +13,8 @@ from mark_i.ui.gui.gui_config import (
     OPTIONS_CONST_MAP,
     MAX_PREVIEW_WIDTH,
     MAX_PREVIEW_HEIGHT,
-    CONDITION_TYPES,  # Changed from ALL_CONDITION_TYPES
-    ACTION_TYPES,  # Assuming this is correct, verify if error persists
+    CONDITION_TYPES,
+    ACTION_TYPES,
     LOGICAL_OPERATORS,
 )
 from mark_i.ui.gui.gui_utils import validate_and_get_widget_value
@@ -23,7 +23,6 @@ from mark_i.ui.gui.panels.condition_editor_component import ConditionEditorCompo
 from mark_i.core.logging_setup import APP_ROOT_LOGGER_NAME
 
 logger = logging.getLogger(f"{APP_ROOT_LOGGER_NAME}.ui.gui.panels.details_panel")
-
 
 class DetailsPanel(ctk.CTkScrollableFrame):
     def __init__(self, master: Any, parent_app: Any, **kwargs):
@@ -224,9 +223,7 @@ class DetailsPanel(ctk.CTkScrollableFrame):
         ctk.CTkLabel(self.action_params_frame, text="Action Type:").grid(row=0, column=0, sticky="w", padx=(0, 5), pady=2)
         init_act_type = str(act_data.get("type", "log_message"))
         var_act_type = ctk.StringVar(value=init_act_type)
-        menu_act_type = ctk.CTkOptionMenu(
-            self.action_params_frame, variable=var_act_type, values=ACTION_TYPES, command=lambda choice: self.parent_app._on_rule_part_type_change("action", choice)
-        )  # Corrected: ACTION_TYPES
+        menu_act_type = ctk.CTkOptionMenu(self.action_params_frame, variable=var_act_type, values=ACTION_TYPES, command=lambda choice: self.parent_app._on_rule_part_type_change("action", choice))
         menu_act_type.grid(row=0, column=1, sticky="ew", padx=5, pady=2)
         self.detail_optionmenu_vars["action_type_var"] = var_act_type
         self.detail_widgets["action_type"] = menu_act_type
@@ -250,9 +247,7 @@ class DetailsPanel(ctk.CTkScrollableFrame):
         current_type = str(sub_cond_data.get("type", "always_true"))
         ctk.CTkLabel(target_editor_frame, text=f"Editing Sub-Condition #{index+1} / Type:", font=ctk.CTkFont(size=12)).grid(row=0, column=0, padx=(0, 5), pady=(5, 2), sticky="w")
         type_var = ctk.StringVar(value=current_type)
-        type_menu = ctk.CTkOptionMenu(
-            target_editor_frame, variable=type_var, values=CONDITION_TYPES, command=lambda choice: self.parent_app._on_rule_part_type_change("condition", choice)
-        )  # Corrected: CONDITION_TYPES
+        type_menu = ctk.CTkOptionMenu(target_editor_frame, variable=type_var, values=CONDITION_TYPES, command=lambda choice: self.parent_app._on_rule_part_type_change("condition", choice))
         type_menu.grid(row=0, column=1, padx=5, pady=(5, 2), sticky="ew")
         self.detail_optionmenu_vars["subcond_condition_type_var"] = type_var
         self.detail_widgets["subcond_condition_type"] = type_menu
@@ -353,6 +348,7 @@ class DetailsPanel(ctk.CTkScrollableFrame):
     def _render_dynamic_parameters(self, param_group_key: str, item_subtype: str, data_source: Dict[str, Any], parent_frame: ctk.CTkFrame, start_row: int, widget_prefix: str):
         current_pass_param_widgets_and_defs: List[Dict[str, Any]] = []
         current_pass_controlling_widgets: Dict[str, Union[ctk.CTkOptionMenu, ctk.CTkCheckBox]] = {}
+        current_group = None
 
         # Clear previous dynamic widgets
         for child_widget in list(parent_frame.winfo_children()):
@@ -378,6 +374,12 @@ class DetailsPanel(ctk.CTkScrollableFrame):
             p_def = copy.deepcopy(p_def_orig)
             p_def["_param_group_key"] = param_group_key
             p_def["_item_subtype"] = item_subtype
+
+            p_group = p_def.get("group")
+            if p_group and p_group != current_group:
+                ctk.CTkLabel(parent_frame, text=p_group.upper(), font=ctk.CTkFont(size=11, weight="bold", slant="italic")).grid(row=current_r, column=0, columnspan=2, sticky="w", pady=(8, 2))
+                current_r += 1
+                current_group = p_group
 
             p_id, lbl_txt, w_type, def_val = p_def["id"], p_def["label"], p_def["widget"], p_def.get("default", "")
             current_value_for_param = data_source.get(p_id, def_val)
@@ -616,5 +618,3 @@ class DetailsPanel(ctk.CTkScrollableFrame):
                     params["region"] = region_val_at
 
         return params if all_ok else None
-
-    # --- End of Refactored get_all_rule_data_from_ui ---
