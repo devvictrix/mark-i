@@ -1,38 +1,30 @@
 import logging
-from typing import Dict, List, Any, Optional  # Added this line
-
-# Use __name__ for module-level logger for better organization if this module grows.
-# For now, simple print or direct APP_ROOT_LOGGER_NAME if complex logging needed here.
-# logger = logging.getLogger(__name__)
-# from mark_i.core.logging_setup import APP_ROOT_LOGGER_NAME
-# logger = logging.getLogger(f"{APP_ROOT_LOGGER_NAME}.ui.gui.gui_config")
+from typing import Dict, List, Any, Optional
 
 # --- Constants ---
-DEFAULT_PROFILE_STRUCTURE: Dict[str, Any] = {  # Added type hint
+DEFAULT_PROFILE_STRUCTURE: Dict[str, Any] = {
     "profile_description": "New Profile",
     "settings": {
         "monitoring_interval_seconds": 1.0,
         "analysis_dominant_colors_k": 3,
-        "tesseract_cmd_path": None,  # Optional path to tesseract executable
-        "tesseract_config_custom": "",  # Custom tesseract config string, e.g., "--psm 6"
-        "gemini_default_model_name": "gemini-1.5-flash-latest",  # Default model for Gemini features
+        "tesseract_cmd_path": None,
+        "tesseract_config_custom": "",
+        "gemini_default_model_name": "gemini-1.5-flash-latest",
     },
     "regions": [],
     "templates": [],
     "rules": [],
 }
 
-MAX_PREVIEW_WIDTH: int = 200  # Max width for template image previews in GUI
-MAX_PREVIEW_HEIGHT: int = 150  # Max height for template image previews in GUI
+MAX_PREVIEW_WIDTH: int = 200
+MAX_PREVIEW_HEIGHT: int = 150
 
-# --- Wizard and Generation View Constants (NEW - Moved from profile_creation_wizard.py) ---
 WIZARD_SCREENSHOT_PREVIEW_MAX_WIDTH = 600
 WIZARD_SCREENSHOT_PREVIEW_MAX_HEIGHT = 380
 CANDIDATE_BOX_COLORS = ["#FF00FF", "#00FFFF", "#FFFF00", "#F08080", "#90EE90", "#ADD8E6", "#FFC0CB", "#E6E6FA"]
 SELECTED_CANDIDATE_BOX_COLOR = "lime green"
 FONT_PATH_PRIMARY = "arial.ttf"
 FONT_PATH_FALLBACK = "DejaVuSans.ttf"
-
 
 # --- Dropdown Options ---
 CONDITION_TYPES: List[str] = [
@@ -41,91 +33,36 @@ CONDITION_TYPES: List[str] = [
     "template_match_found",
     "ocr_contains_text",
     "dominant_color_matches",
-    "gemini_vision_query",  # AI-powered visual question answering
-    "always_true",  # For unconditional rule execution or testing
+    "gemini_vision_query",
+    "always_true",
 ]
-
-ACTION_TYPES: List[str] = ["click", "type_text", "press_key", "log_message", "gemini_perform_task"]  # AI-driven task execution (goal-based and NLU-based)
-
-LOGICAL_OPERATORS: List[str] = ["AND", "OR"]  # For compound conditions
-
+ACTION_TYPES: List[str] = ["click", "type_text", "press_key", "log_message", "gemini_perform_task"]
+LOGICAL_OPERATORS: List[str] = ["AND", "OR"]
 CLICK_TARGET_RELATIONS: List[str] = [
     "center_of_region",
     "center_of_last_match",
     "absolute",
     "relative_to_region",
-    "center_of_gemini_element",  # Target center of Gemini-identified bounding box
-    "top_left_of_gemini_element",  # Target top-left of Gemini-identified bounding box
+    "center_of_gemini_element",
+    "top_left_of_gemini_element",
 ]
-
-CLICK_BUTTONS: List[str] = ["left", "middle", "right", "primary", "secondary"]  # PyAutoGUI valid button names
-
-LOG_LEVELS: List[str] = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]  # For log_message action
-
-# For 'gemini_perform_task' action's 'allowed_actions_override' parameter.
-# These should match the keys in GeminiDecisionModule.PREDEFINED_ALLOWED_SUB_ACTIONS.
-# This list is for UI presentation (e.g., tooltips, validation hints).
-# The actual enforcement happens in GeminiDecisionModule.
+CLICK_BUTTONS: List[str] = ["left", "middle", "right", "primary", "secondary"]
+LOG_LEVELS: List[str] = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 GEMINI_TASK_ALLOWED_PRIMITIVE_ACTIONS_FOR_UI_HINT: List[str] = [
     "CLICK_DESCRIBED_ELEMENT",
     "TYPE_IN_DESCRIBED_FIELD",
     "PRESS_KEY_SIMPLE",
     "CHECK_VISUAL_STATE",
-    # "WAIT_SHORT" # Add if/when implemented
 ]
 
-# --- Data-driven UI Parameter Configuration ---
-# This dictionary defines the parameters for each condition and action type,
-# driving how the DetailsPanel in the GUI dynamically renders input fields.
-#
-# Structure for each parameter definition:
-# {
-#   "id": "internal_parameter_name",                 // Key used in JSON profile
-#   "label": "User-Friendly Label:",                 // Text shown in GUI
-#   "widget": "entry" | "textbox" | "optionmenu_static" | "optionmenu_dynamic" | "checkbox",
-#   "type": python_type | "bgr_string" | "list_str_csv", // Expected data type for validation
-#   "group": "Group Header Name",                    // (NEW) Optional header for visual grouping
-#   "default": default_value,                        // Default value for this parameter
-#   "required": True | False,                        // Is this parameter mandatory?
-#   "placeholder": "Hint text for entry/textbox",    // Optional
-#   "allow_empty_string": True | False,              // For string types, if "" is a valid value (even if required)
-#   "min_val": number, "max_val": number,            // For numeric types
-#   "options_source": "regions" | "templates",      // For optionmenu_dynamic
-#   "options_const_key": "KEY_IN_OPTIONS_CONST_MAP", // For optionmenu_static
-#   "height": number,                                // For CTkTextbox height
-#   "condition_show": {                             // Optional: for conditional visibility
-#       "field_id_prefix": "act_" | "cond_" | "subcond_", // Prefix of the CONTROLLING widget's ID
-#       "field": "controlling_parameter_id",         // ID of the CONTROLLING parameter
-#       "values": ["value1", "value2"]               // Show this param IF controller's value is one of these
-#   }
-# }
+# --- UI Parameter Configuration with Tooltips ---
 UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
     "conditions": {
         "pixel_color": [
-            {"id": "relative_x", "label": "Relative X:", "widget": "entry", "type": int, "default": 0, "required": True, "placeholder": "0", "group": "Targeting"},
-            {"id": "relative_y", "label": "Relative Y:", "widget": "entry", "type": int, "default": 0, "required": True, "placeholder": "0", "group": "Targeting"},
-            {
-                "id": "expected_bgr",
-                "label": "Expected BGR:",
-                "widget": "entry",
-                "type": "bgr_string",
-                "default": "0,0,0",
-                "required": True,
-                "placeholder": "B,G,R e.g., 255,0,128",
-                "group": "Color Matching",
-            },
-            {
-                "id": "tolerance",
-                "label": "Tolerance (0-255):",
-                "widget": "entry",
-                "type": int,
-                "default": 0,
-                "required": True,
-                "min_val": 0,
-                "max_val": 255,
-                "placeholder": "0",
-                "group": "Color Matching",
-            },
+            {"id": "relative_x", "label": "Relative X:", "widget": "entry", "type": int, "default": 0, "required": True, "group": "Targeting"},
+            {"id": "relative_y", "label": "Relative Y:", "widget": "entry", "type": int, "default": 0, "required": True, "group": "Targeting"},
+            {"id": "expected_bgr", "label": "Expected BGR:", "widget": "entry", "type": "bgr_string", "default": "0,0,0", "required": True, "placeholder": "B,G,R", "group": "Color Matching"},
+            {"id": "tolerance", "label": "Tolerance (0-255):", "widget": "entry", "type": int, "default": 0, "required": True, "min_val": 0, "max_val": 255, "group": "Color Matching"},
             {"id": "region", "label": "Target Region (Override):", "widget": "optionmenu_dynamic", "options_source": "regions", "type": str, "default": "", "required": False, "group": "Scope"},
         ],
         "average_color_is": [
@@ -164,20 +101,9 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "required": True,
                 "min_val": 0.0,
                 "max_val": 1.0,
-                "placeholder": "0.8",
                 "group": "Matching Parameters",
             },
-            {
-                "id": "capture_as",
-                "label": "Capture Match As:",
-                "widget": "entry",
-                "type": str,
-                "default": "",
-                "required": False,
-                "allow_empty_string": True,
-                "placeholder": "Optional variable name",
-                "group": "Output",
-            },
+            {"id": "capture_as", "label": "Capture Match As:", "widget": "entry", "type": str, "default": "", "required": False, "placeholder": "Optional variable name", "group": "Output"},
             {"id": "region", "label": "Target Region (Override):", "widget": "optionmenu_dynamic", "options_source": "regions", "type": str, "default": "", "required": False, "group": "Scope"},
         ],
         "ocr_contains_text": [
@@ -188,7 +114,7 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": "list_str_csv",
                 "default": [],
                 "required": True,
-                "placeholder": "keyword1,another keyword",
+                "placeholder": "keyword1,another",
                 "group": "Text Matching",
             },
             {"id": "case_sensitive", "label": "Case Sensitive Search", "widget": "checkbox", "type": bool, "default": False, "required": False, "group": "Text Matching"},
@@ -199,23 +125,11 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": float,
                 "default": 70.0,
                 "required": False,
-                "allow_empty_string": True,
                 "min_val": 0.0,
                 "max_val": 100.0,
-                "placeholder": "e.g., 70.0",
                 "group": "OCR Parameters",
             },
-            {
-                "id": "capture_as",
-                "label": "Capture Full OCR Text As:",
-                "widget": "entry",
-                "type": str,
-                "default": "",
-                "required": False,
-                "allow_empty_string": True,
-                "placeholder": "Optional variable name",
-                "group": "Output",
-            },
+            {"id": "capture_as", "label": "Capture Full OCR Text As:", "widget": "entry", "type": str, "default": "", "required": False, "placeholder": "Optional variable name", "group": "Output"},
             {"id": "region", "label": "Target Region (Override):", "widget": "optionmenu_dynamic", "options_source": "regions", "type": str, "default": "", "required": False, "group": "Scope"},
         ],
         "dominant_color_matches": [
@@ -263,11 +177,11 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "label": "Gemini Vision Prompt:",
                 "widget": "textbox",
                 "type": str,
-                "default": "Describe this image in detail.",
+                "default": "Describe this image.",
                 "required": True,
-                "placeholder": "e.g., Is there a login button visible? If so, describe it.",
                 "height": 100,
                 "group": "AI Prompt",
+                "tooltip": "The question to ask Gemini about the region image.\nGood prompts are specific. To get coordinates, ask for a JSON response with a 'box' key.",
             },
             {
                 "id": "expected_response_contains",
@@ -276,32 +190,32 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": "list_str_csv",
                 "default": [],
                 "required": False,
-                "allow_empty_string": True,
-                "placeholder": "keyword1,keyword2",
+                "placeholder": "success,OK",
                 "group": "Validation",
+                "tooltip": "Condition passes if Gemini's text response contains any of these comma-separated keywords.",
             },
             {"id": "case_sensitive_response_check", "label": "Case Sensitive (for 'Contains')", "widget": "checkbox", "type": bool, "default": False, "required": False, "group": "Validation"},
             {
                 "id": "expected_response_json_path",
-                "label": "JSON Path in Response (Dot Notation, Optional):",
+                "label": "JSON Path in Response (Optional):",
                 "widget": "entry",
                 "type": str,
                 "default": "",
                 "required": False,
-                "allow_empty_string": True,
-                "placeholder": "e.g., data.items.0.name",
+                "placeholder": "data.items.0.name",
                 "group": "Validation",
+                "tooltip": "Use dot notation to check a value within a JSON response from Gemini.\nExample: user.name or results.0.status",
             },
             {
                 "id": "expected_json_value",
-                "label": "Expected JSON Value (String, Optional):",
+                "label": "Expected JSON Value (Optional):",
                 "widget": "entry",
                 "type": str,
                 "default": "",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "Value at JSON path",
                 "group": "Validation",
+                "tooltip": "If JSON Path is set, the condition will only pass if the value at that path matches this string.",
             },
             {
                 "id": "capture_as",
@@ -310,20 +224,20 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": str,
                 "default": "",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "Optional variable name",
                 "group": "Output",
+                "tooltip": "Save Gemini's response to a variable. If JSON Path is used, only that value is saved. Otherwise, the full JSON (if valid) or text is saved.",
             },
             {
                 "id": "model_name",
-                "label": "Gemini Model (Override Profile Default, Optional):",
+                "label": "Gemini Model (Override):",
                 "widget": "entry",
                 "type": str,
                 "default": "",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "e.g., gemini-1.5-flash-latest",
                 "group": "AI Configuration",
+                "tooltip": "Specify a Gemini model to use, overriding the profile's default model for this specific query.",
             },
             {"id": "region", "label": "Target Region (Override):", "widget": "optionmenu_dynamic", "options_source": "regions", "type": str, "default": "", "required": False, "group": "Scope"},
         ],
@@ -336,7 +250,6 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": str,
                 "default": "",
                 "required": False,
-                "placeholder": "Usually not needed for always_true",
                 "group": "Scope",
             }
         ],
@@ -352,52 +265,50 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "default": "center_of_region",
                 "required": True,
                 "group": "Targeting",
+                "tooltip": "Defines how the click coordinate is calculated.\n'center_of_region': Clicks the center of the rule's default or target region.\n'center_of_last_match': Clicks the center of a found template.\n'absolute': Clicks absolute screen coordinates.\n'gemini_element': Clicks a coordinate derived from a Gemini vision query variable.",
             },
             {
                 "id": "target_region",
-                "label": "Target Region (if relation needs it):",
+                "label": "Target Region:",
                 "widget": "optionmenu_dynamic",
                 "options_source": "regions",
                 "type": str,
                 "default": "",
                 "required": False,
-                "condition_show": {"field_id_prefix": "act_", "field": "target_relation", "values": ["center_of_region", "relative_to_region"]},
+                "condition_show": {"field": "target_relation", "values": ["center_of_region", "relative_to_region"]},
                 "group": "Targeting",
             },
             {
                 "id": "x",
-                "label": "X Coord/Offset (if relation needs it):",
+                "label": "X Coord/Offset:",
                 "widget": "entry",
                 "type": str,
                 "default": "0",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "Abs/Rel X or {var}",
-                "condition_show": {"field_id_prefix": "act_", "field": "target_relation", "values": ["absolute", "relative_to_region"]},
+                "condition_show": {"field": "target_relation", "values": ["absolute", "relative_to_region"]},
                 "group": "Targeting",
             },
             {
                 "id": "y",
-                "label": "Y Coord/Offset (if relation needs it):",
+                "label": "Y Coord/Offset:",
                 "widget": "entry",
                 "type": str,
                 "default": "0",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "Abs/Rel Y or {var}",
-                "condition_show": {"field_id_prefix": "act_", "field": "target_relation", "values": ["absolute", "relative_to_region"]},
+                "condition_show": {"field": "target_relation", "values": ["absolute", "relative_to_region"]},
                 "group": "Targeting",
             },
             {
                 "id": "gemini_element_variable",
-                "label": "Gemini Element Variable (if relation needs it):",
+                "label": "Gemini Element Variable:",
                 "widget": "entry",
                 "type": str,
                 "default": "",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "e.g., captured_button_data",
-                "condition_show": {"field_id_prefix": "act_", "field": "target_relation", "values": ["center_of_gemini_element", "top_left_of_gemini_element"]},
+                "condition_show": {"field": "target_relation", "values": ["center_of_gemini_element", "top_left_of_gemini_element"]},
                 "group": "Targeting",
             },
             {
@@ -410,28 +321,8 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "required": True,
                 "group": "Click Properties",
             },
-            {
-                "id": "clicks",
-                "label": "Number of Clicks:",
-                "widget": "entry",
-                "type": str,
-                "default": "1",
-                "required": False,
-                "allow_empty_string": True,
-                "placeholder": "1 or {var}",
-                "group": "Click Properties",
-            },
-            {
-                "id": "interval",
-                "label": "Interval Betw. Clicks (s):",
-                "widget": "entry",
-                "type": str,
-                "default": "0.0",
-                "required": False,
-                "allow_empty_string": True,
-                "placeholder": "0.0 or {var}",
-                "group": "Click Properties",
-            },
+            {"id": "clicks", "label": "Number of Clicks:", "widget": "entry", "type": str, "default": "1", "required": False, "placeholder": "1 or {var}", "group": "Click Properties"},
+            {"id": "interval", "label": "Interval Betw. Clicks (s):", "widget": "entry", "type": str, "default": "0.0", "required": False, "placeholder": "0.0 or {var}", "group": "Click Properties"},
             {
                 "id": "pyautogui_pause_before",
                 "label": "Pause Before Action (s):",
@@ -439,7 +330,6 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": str,
                 "default": "0.0",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "0.0 or {var}",
                 "group": "Timing",
             },
@@ -453,7 +343,7 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "default": "",
                 "required": True,
                 "allow_empty_string": True,
-                "placeholder": "Enter text here or use {variable}",
+                "placeholder": "Enter text or use {variable}",
                 "height": 80,
                 "group": "Content",
             },
@@ -464,7 +354,6 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": str,
                 "default": "0.0",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "0.0 or {var}",
                 "group": "Typing Properties",
             },
@@ -475,7 +364,6 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": str,
                 "default": "0.0",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "0.0 or {var}",
                 "group": "Timing",
             },
@@ -488,7 +376,7 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": str,
                 "default": "enter",
                 "required": True,
-                "placeholder": "e.g., enter OR ctrl,alt,delete OR {my_key_var}",
+                "placeholder": "e.g., enter OR ctrl,alt,delete",
                 "group": "Key Input",
             },
             {
@@ -498,7 +386,6 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": str,
                 "default": "0.0",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "0.0 or {var}",
                 "group": "Timing",
             },
@@ -511,8 +398,7 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": str,
                 "default": "Rule triggered log message.",
                 "required": True,
-                "allow_empty_string": True,
-                "placeholder": "Your log message or {variable}",
+                "placeholder": "Your message or {variable}",
                 "height": 80,
                 "group": "Content",
             },
@@ -521,26 +407,14 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
         "gemini_perform_task": [
             {
                 "id": "natural_language_command",
-                "label": "Natural Language Command for Gemini:",
+                "label": "Natural Language Command:",
                 "widget": "textbox",
                 "type": str,
-                "default": "Example: Click the 'Next' button if it is visible.",
+                "default": "Click the 'Next' button.",
                 "required": True,
                 "height": 100,
-                "placeholder": "Describe the task for Gemini...",
                 "group": "AI Command",
-            },
-            {
-                "id": "goal_prompt",
-                "label": "Simple Goal Prompt (Legacy - Optional):",
-                "widget": "textbox",
-                "type": str,
-                "default": "",
-                "required": False,
-                "allow_empty_string": True,
-                "height": 60,
-                "placeholder": "If NLU command is empty, use this simple goal.",
-                "group": "AI Command",
+                "tooltip": "A high-level command for Gemini to interpret and execute.\nGemini will break this down into smaller steps like finding and clicking elements.",
             },
             {
                 "id": "context_region_names",
@@ -549,20 +423,20 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": "list_str_csv",
                 "default": [],
                 "required": False,
-                "allow_empty_string": True,
-                "placeholder": "region1,main_screen (uses rule default if empty)",
+                "placeholder": "main_window,status_bar",
                 "group": "AI Context",
+                "tooltip": "Provide Gemini with images from these regions for visual context.\nIf empty, uses the rule's default region.",
             },
             {
                 "id": "allowed_actions_override",
-                "label": "Allowed Sub-Actions by Gemini (CSV, Optional):",
+                "label": "Allowed Sub-Actions (CSV, Optional):",
                 "widget": "entry",
                 "type": "list_str_csv",
                 "default": [],
                 "required": False,
-                "allow_empty_string": True,
-                "placeholder": "e.g., CLICK_DESCRIBED_ELEMENT (see docs)",
+                "placeholder": "CLICK_DESCRIBED_ELEMENT",
                 "group": "AI Configuration",
+                "tooltip": "Limit the types of actions Gemini can perform. If empty, all safe actions are allowed.",
             },
             {"id": "require_confirmation_per_step", "label": "Confirm Each AI-Decided Step", "widget": "checkbox", "type": bool, "default": True, "required": False, "group": "AI Configuration"},
             {
@@ -584,19 +458,23 @@ UI_PARAM_CONFIG: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
                 "type": str,
                 "default": "0.1",
                 "required": False,
-                "allow_empty_string": True,
                 "placeholder": "0.1 or {var}",
                 "group": "Timing",
             },
         ],
     },
 }
+# Fallback for missing keys
+for cond_type in CONDITION_TYPES:
+    UI_PARAM_CONFIG["conditions"].setdefault(cond_type, [])
+for act_type in ACTION_TYPES:
+    UI_PARAM_CONFIG["actions"].setdefault(act_type, [])
 
 # Mapping for static optionmenu sources
 OPTIONS_CONST_MAP: Dict[str, List[str]] = {
     "CLICK_TARGET_RELATIONS": CLICK_TARGET_RELATIONS,
     "CLICK_BUTTONS": CLICK_BUTTONS,
     "LOG_LEVELS": LOG_LEVELS,
-    "LOGICAL_OPERATORS": LOGICAL_OPERATORS,  # Added for consistency if needed, though usually hardcoded in UI
+    "LOGICAL_OPERATORS": LOGICAL_OPERATORS,
     "GEMINI_TASK_ALLOWED_ACTION_TYPES_FOR_UI": GEMINI_TASK_ALLOWED_PRIMITIVE_ACTIONS_FOR_UI_HINT,
 }

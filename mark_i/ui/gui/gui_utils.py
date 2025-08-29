@@ -9,6 +9,47 @@ import customtkinter as ctk
 logger = logging.getLogger(__name__)
 
 
+class Tooltip:
+    """
+    Creates a tooltip for a given widget.
+    It appears when the mouse enters the widget and disappears when it leaves.
+    """
+    def __init__(self, widget: ctk.CTkBaseClass, text: str):
+        self.widget = widget
+        self.text = text
+        self.tooltip_window: Optional[tk.Toplevel] = None
+        self.widget.bind("<Enter>", self.show_tooltip)
+        self.widget.bind("<Leave>", self.hide_tooltip)
+
+    def show_tooltip(self, event: Any):
+        """Display the tooltip window."""
+        if self.tooltip_window or not self.text:
+            return
+
+        x, y, _, _ = self.widget.bbox("insert")
+        x += self.widget.winfo_rootx() + 25
+        y += self.widget.winfo_rooty() + 25
+
+        self.tooltip_window = tk.Toplevel(self.widget)
+        self.tooltip_window.wm_overrideredirect(True)
+        self.tooltip_window.wm_geometry(f"+{x}+{y}")
+        
+        # Use a standard tk.Label for the tooltip content
+        # This avoids issues with CTk theming on a simple Toplevel
+        label = tk.Label(
+            self.tooltip_window, text=self.text, justify='left',
+            background="#FFFFE0", relief='solid', borderwidth=1,
+            font=("tahoma", "8", "normal"), wraplength=300
+        )
+        label.pack(ipadx=1)
+
+    def hide_tooltip(self, event: Any):
+        """Hide the tooltip window."""
+        if self.tooltip_window:
+            self.tooltip_window.destroy()
+            self.tooltip_window = None
+
+
 def parse_bgr_string(bgr_str: str, field_name_for_error: str, parent_widget_for_msgbox: Optional[Any] = None) -> Optional[List[int]]:
     """
     Parses a 'B,G,R' string (e.g., "255,0,128") into a list of 3 integers.
