@@ -501,8 +501,8 @@ class ProfileCreationWizardWindow(ctk.CTkToplevel):
             for i, candidate in enumerate(candidate_boxes):
                 box = candidate.get("box");
                 if box and len(box) == 4:
-                    color = SELECTED_CANDIDATE_BOX_COLOR if i == selected_box_idx else CANDIDATE_BOX_COLORS[i % len(CANDIDATE_BOX_COLORS)]; fill_color = color + "40"; x,y,w,h = box
-                    draw.rectangle([x,y, x+w, y+h], outline=color, width=2, fill=fill_color if i != selected_box_idx else None)
+                    color = SELECTED_CANDIDATE_BOX_COLOR if i == selected_box_idx else CANDIDATE_BOX_COLORS[i % len(CANDIDATE_BOX_COLORS)]; fill_color = color + "40" if i != selected_box_idx else None; x,y,w,h = box
+                    draw.rectangle([x,y, x+w, y+h], outline=color, width=2, fill=fill_color)
                     if i == selected_box_idx: cx,cy=x+w//2,y+h//2; draw.line([(cx-6,cy),(cx+6,cy)],fill=color,width=3); draw.line([(cx,cy-6),(cx,cy+6)],fill=color,width=3)
                     label_text = str(i + 1); text_x, text_y = x + 3, y + 1
                     try:
@@ -725,7 +725,8 @@ class ProfileCreationWizardWindow(ctk.CTkToplevel):
             if logic_tuple:
                 confirmed_condition, confirmed_action = logic_tuple; current_step = self.profile_generator.get_current_plan_step()
                 if current_step and self.current_step_region_name:
-                    base_rule_name = f"Rule_Step{current_step.get('step_id')}_{current_step.get('description', 'Task')[:15].replace(' ','_').replace("'", "")}"
+                    sanitized_desc = current_step.get('description', 'Task')[:15].replace(' ','_').replace("'", "")
+                    base_rule_name = f"Rule_Step{current_step.get('step_id')}_{sanitized_desc}"
                     rule_name_to_add = base_rule_name; count = 1
                     while any(r.get("name") == rule_name_to_add for r in self.profile_generator.generated_profile_data.get("rules",[])): rule_name_to_add = f"{base_rule_name}_{count}"; count += 1
                     rule_to_add = {"name": rule_name_to_add, "region": self.current_step_region_name, "condition": confirmed_condition, "action": confirmed_action, "comment": f"AI Gen for: {current_step.get('description')}"}

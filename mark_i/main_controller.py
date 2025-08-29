@@ -9,6 +9,7 @@ from mark_i.engines.capture_engine import CaptureEngine
 from mark_i.engines.analysis_engine import AnalysisEngine
 from mark_i.engines.rules_engine import RulesEngine
 from mark_i.engines.action_executor import ActionExecutor
+from mark_i.engines.gemini_analyzer import GeminiAnalyzer  # <-- ADDED THIS LINE
 from mark_i.engines.gemini_decision_module import GeminiDecisionModule  # For NLU tasks
 
 # Standardized logger for this module
