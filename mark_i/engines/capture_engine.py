@@ -5,6 +5,7 @@ from typing import Optional, Dict, Any
 import numpy as np
 from PIL import Image, ImageGrab, UnidentifiedImageError  # Pillow's ImageGrab for screen capture
 import cv2  # OpenCV for color conversion (RGB/RGBA from PIL to BGR for internal use)
+import pyautogui # For reliably getting screen dimensions
 
 # Standardized logger for this module
 from mark_i.core.logging_setup import APP_ROOT_LOGGER_NAME
@@ -14,25 +15,15 @@ logger = logging.getLogger(f"{APP_ROOT_LOGGER_NAME}.engines.capture_engine")
 
 class CaptureEngine:
     """
-    Responsible for capturing specified screen regions.
+    Responsible for capturing specified screen regions and providing screen metrics.
 
-    It primarily uses Pillow's ImageGrab, which is generally efficient for Windows.
-    It converts captures to OpenCV's standard BGR NumPy array format for consistent
-    use by other engine components (AnalysisEngine, GeminiAnalyzer, etc.).
-
-    Notes on Cross-Platform Capture:
-    - Windows: Pillow ImageGrab.grab() is generally reliable and performant.
-    - macOS: ImageGrab.grab() usually works but may require screen recording permissions
-             for the application/terminal. Performance can vary.
-    - Linux: ImageGrab.grab() often relies on external tools like 'scrot' or
-             'gnome-screenshot' being installed. It also typically requires an active
-             X server (may not work in pure Wayland sessions without XWayland, or headless).
-    For future enhancements targeting optimal cross-platform performance and reliability,
-    libraries like 'mss' or direct OS-specific APIs could be explored.
+    It primarily uses Pillow's ImageGrab for capture and PyAutoGUI for screen dimension
+    detection. It converts captures to OpenCV's standard BGR NumPy array format for
+    consistent use by other engine components.
     """
 
     def __init__(self):
-        """Initializes the CaptureEngine and logs the current operating system."""
+        """Initializes the CaptureEngine, logs the OS, and determines screen dimensions."""
         self.system = platform.system()
         logger.info(f"CaptureEngine initialized. Operating System: {self.system}.")
 
@@ -44,6 +35,33 @@ class CaptureEngine:
             logger.info("Capture method: Pillow ImageGrab.grab() for Linux. May require 'scrot' or an X server.")
         else:
             logger.warning(f"Capture method: Pillow ImageGrab.grab() for unrecognized OS '{self.system}'. Capture behavior may vary.")
+
+        # --- NEW: System Metrics for screen size ---
+        self.system_metrics = self._get_system_metrics()
+
+
+    def _get_system_metrics(self) -> Dict[str, Any]:
+        """Gathers and stores key system metrics, primarily screen dimensions."""
+        metrics = {}
+        try:
+            # Use pyautogui to get the primary monitor's screen dimensions.
+            width, height = pyautogui.size()
+            metrics["primary_screen_width"] = width
+            metrics["primary_screen_height"] = height
+            logger.info(f"Detected primary screen dimensions: {width}x{height}")
+        except Exception as e:
+            metrics["primary_screen_width"] = 1920 # Fallback
+            metrics["primary_screen_height"] = 1080 # Fallback
+            logger.error(f"Failed to get screen dimensions using PyAutoGUI: {e}. Falling back to default 1920x1080.", exc_info=True)
+        return metrics
+
+    def get_primary_screen_width(self) -> int:
+        """Returns the detected width of the primary screen."""
+        return self.system_metrics.get("primary_screen_width", 1920)
+
+    def get_primary_screen_height(self) -> int:
+        """Returns the detected height of the primary screen."""
+        return self.system_metrics.get("primary_screen_height", 1080)
 
     def capture_region(self, region_spec: Dict[str, Any]) -> Optional[np.ndarray]:
         """

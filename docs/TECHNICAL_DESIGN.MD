@@ -3,7 +3,7 @@
 This document outlines the technical design and architectural considerations for the Mark-I visual automation tool. It reflects decisions made in the Architectural Decision Records (ADRs) and current implementation status.
 Version 4.0.0 (Gemini-Powered Visual Intelligence), including all its sub-phases (Phase 1: Core Vision Query, Phase 1.5: Bounding Box Actions, Phase 2: Gemini-Informed Decision Making, and Phase 3: Natural Language Command Interface), is functionally complete.
 This document now incorporates the detailed design for v5.0.0, focusing on AI-Driven Profile Generation as per ADR-009, including Phase 2 GUI Workflow and AI-Assisted Element Suggestion details.
-**This document has been updated for v5.0.2 to detail the Unit Testing strategy.**
+**This document has been updated for v6.0.0 planning to include the design of the Autonomous Assistant Engine.**
 
 ## 1. Core Architecture
 
@@ -56,6 +56,10 @@ The tool is modular, comprising several key Python components, all residing with
   - **Package:** `mark_i.generation.profile_generator`
   - **Responsibility:** Takes the "intermediate plan" from `StrategyPlanner`. Iterates through plan steps, managing an interactive workflow with the user (via `ProfileCreationWizardWindow`). For each step, it uses `GeminiAnalyzer` for visual suggestions (e.g., relevant regions, candidate UI elements) and logic suggestions (conditions, actions). User confirms/refines. Assembles profile. Handles staging and saving of new template images.
   - _Detailed in Section 15.2.2._
+- **`autonomy.engine.AutonomyEngine` Module (NEW - v6.0.0):**
+  - **Package:** `mark_i.autonomy.engine`
+  - **Responsibility:** Acts as a high-level "meta-controller" for proactive, autonomous operation. It runs independently of `MainController` and is not tied to a specific user profile. It continuously observes the screen, assesses the context to identify potential tasks, uses `StrategyPlanner` to generate dynamic plans, and `GeminiDecisionModule` to execute them, subject to user confirmation.
+  - _Detailed in Section 16._
 - **`main_controller.MainController` Class:**
   - Orchestrates the main bot loop for rule-based profile execution.
   - Instantiates all core engine components.
@@ -394,44 +398,55 @@ A modal `ctk.CTkToplevel` window (`mark_i.ui.gui.generation.profile_creation_wiz
 - Loading indicators/messages during long Gemini calls (handled via `threading` and GUI callbacks).
 
 ---
-## 16. vFuture GUI Enhancement Strategy (Design Phase)
+## 16. v6.0.0 Autonomous Assistant Engine
 
-This section outlines the strategy for the `vFuture` development cycle, focusing on the "Super Enhance the GUI" goal from the `FEATURE_ROADMAP.MD`.
+This section details the design of the proactive, autonomous assistant capabilities introduced in v6.0.0, as per **ADR-011**. This system operates independently of the profile-based `MainController`.
 
-### 16.1. Core Principles
+### 16.1. Overview and Architecture
 
-The GUI refinement will be guided by the following principles to ensure a more effective and user-friendly experience:
+The Autonomous Assistant is a separate operational mode for Mark-I. Its purpose is to observe the user's screen holistically, identify potential tasks, and proactively offer to perform them. The architecture is centered around a new `AutonomyEngine` class that orchestrates existing Mark-I engines as tools.
 
-1.  **Clarity over Density:** Prioritize clean, uncluttered layouts. Avoid overwhelming the user with too many options at once. Use progressive disclosure to reveal advanced settings.
-2.  **Guided Workflows:** The UI should naturally guide the user through the process of creating or editing a profile. The next logical action should always be clear.
-3.  **Visual Feedback (Show, Don't Tell):** Whenever possible, provide immediate visual feedback for user actions. This is the core of features like "Real-time Visual Feedback".
-4.  **Consistency:** Maintain a consistent design language, layout structure, and terminology across all UI components, including the main editor and the AI wizard.
-5.  **Reduced Cognitive Load:** Simplify complex configuration tasks. For example, make the relationship between rules, regions, and templates more visually intuitive.
+The core principles are:
+-   **Separation of Concerns:** The autonomous logic is completely decoupled from the reactive, profile-driven logic of `MainController`.
+-   **Leverage Existing Engines:** The new engine acts as a meta-controller, using `CaptureEngine`, `GeminiAnalyzer`, `StrategyPlanner`, and `GeminiDecisionModule` to perform its functions.
+-   **Safety First:** No autonomous action is taken without explicit, real-time user confirmation.
 
-### 16.2. Target Areas for Initial Refinement
+### 16.2. Core Component: `autonomy.engine.AutonomyEngine`
 
-The initial focus will be on the existing `MainAppWindow` and `ProfileCreationWizardWindow`, as they are the primary user touchpoints.
+-   **Lifecycle:** The `AutonomyEngine` will be instantiated and run in its own daemon thread, managed by the main GUI (`MainAppWindow`). It will have `start()` and `stop()` methods.
+-   **Dependencies:** It will be initialized with instances of all major engines: `CaptureEngine`, `GeminiAnalyzer`, `StrategyPlanner`, and `GeminiDecisionModule`.
+-   **State:** The engine will manage its own simple state (e.g., `IDLE`, `ASSESSING`, `AWAITING_CONFIRMATION`, `EXECUTING`).
 
-1.  **`MainAppWindow` Layout & Organization:**
-    *   **Left Panel:** The current single-column layout for settings, regions, and templates can become very long. Propose refactoring this into a `CTkTabview` with three tabs: "Settings", "Regions", and "Templates". This will neaten the interface and reduce scrolling.
-    *   **Center Panel (Rules):** The simple list of rule names is functional but could be more informative. Consider adding a small icon or color-coding to indicate the rule's action type (e.g., a mouse icon for `click`, a keyboard for `type_text`).
-    *   **Details Panel (`DetailsPanel`):** This is the most complex area. The dynamic rendering is powerful but can be confusing.
-        *   Improve visual grouping of parameters with headers or collapsible sections.
-        *   Make the workflow for creating/editing compound conditions more intuitive, perhaps with a more visual tree-like structure in the `ConditionEditorComponent`.
-        *   Improve the visibility and workflow for using captured variables from conditions in actions.
+### 16.3. Core Loop Data Flow: Observe -> Assess -> Plan -> Execute
 
-2.  **`ProfileCreationWizardWindow` Flow & Clarity:**
-    *   **Feedback:** Enhance the visual feedback at each stage. For example, after a region is defined, keep a small thumbnail of it visible while defining the logic.
-    *   **Guidance:** Add more in-UI tooltips and brief descriptive texts to explain concepts like "target relation" or "min confidence" to new users.
-    *   **Flexibility:** While the step-by-step process is good, consider allowing users to more easily jump back to a specific previous step (e.g., "Back to Plan Review") without losing all subsequent work. This requires more robust state management.
+The `AutonomyEngine`'s `run_autonomy_loop()` method will continuously cycle through four phases:
 
-### 16.3. Implementation Approach
+1.  **Observe:**
+    -   The `_observe()` method uses `CaptureEngine` to take a full-screen snapshot.
+    -   This occurs at a configurable, relatively slow interval (e.g., every 5-15 seconds) to minimize performance impact while idle.
 
-The GUI enhancement will be an iterative process:
+2.  **Assess:**
+    -   The `_assess()` method sends the screenshot to `GeminiAnalyzer` with a specialized, high-level prompt.
+    -   **Prompt Goal:** The prompt will ask a powerful multimodal model (e.g., Gemini 1.5 Pro) to:
+        -   Briefly describe the current screen content and identify the application in focus.
+        -   Infer the user's likely current goal or task.
+        -   Identify any potential "next steps" or "assistance opportunities" that Mark-I could perform.
+    -   **Expected AI Response:** A JSON object indicating if a task was identified, a confidence score, a description of the task, and a concise, actionable goal for the next phase (e.g., `{"task_identified": true, "confidence": 0.85, "task_description": "A file download notification for 'report.pdf' is visible.", "derived_goal": "Move the downloaded 'report.pdf' file to the Desktop."}`).
 
-1.  **Phase 1 (Layout Refactoring):** Start by implementing the `CTkTabview` in the `MainAppWindow`'s left panel. This is a non-destructive change that immediately improves organization.
-2.  **Phase 2 (Details Panel Improvements):** Focus on improving the layout and clarity of the `DetailsPanel`, starting with better visual grouping of parameters.
-3.  **Phase 3 (Wizard Refinements):** Implement the enhanced feedback and guidance features in the `ProfileCreationWizardWindow`.
-4.  **Phase 4 (Advanced Features):** Once the existing UI is more robust and user-friendly, begin development on the more complex new features like "Real-time Visual Feedback" and the "GUI-based Bot Runner".
+3.  **Plan:**
+    -   If a high-confidence task is identified in the Assess phase, the `_plan()` method is triggered.
+    -   It passes the `derived_goal` from the assessment to the existing `StrategyPlanner.generate_intermediate_plan()` method.
+    -   This reuses the v5.0.0 planning logic to generate a human-readable sequence of steps for the identified task.
 
-A new ADR will be created if any of these changes require significant shifts in the underlying UI architecture or state management logic.
+4.  **Execute:**
+    -   The `_execute()` method is triggered if a valid plan is generated.
+    -   **Confirmation Layer (Critical):** It will first present the plan to the user via a simple, non-blocking GUI notification. The notification will clearly state the proposed action (e.g., "Mark-I proposes to: Move report.pdf to Desktop.") with "Allow" and "Deny" buttons.
+    -   **Execution via GDM:** If the user clicks "Allow", the `AutonomyEngine` will pass the `derived_goal` or the structured plan to the existing `GeminiDecisionModule.execute_nlu_task()` method to carry out the actions. This reuses the robust v4.0.0 execution logic.
+    -   The engine will wait for the task to complete before returning to the `IDLE` state and resuming the Observe/Assess cycle.
+
+### 16.4. Safety & Confirmation Layer
+
+-   The confirmation UI will be a new, simple Toplevel window or a custom notification widget that is always on top.
+-   It must be non-modal to avoid interrupting the user's workflow if they wish to ignore the suggestion.
+-   It will have a timeout, after which the proposal is automatically denied.
+-   The `AutonomyEngine` will have configurable settings, such as "confidence threshold for proposing tasks" and "disable autonomous suggestions for specific applications".
