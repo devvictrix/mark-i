@@ -1,0 +1,3 @@
+[tool.black]
+line-length = 199
+# target-version = ['py39'] # Optional: if you want Black to specifically target Python 3.9 syntax

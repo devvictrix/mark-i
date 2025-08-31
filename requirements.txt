@@ -1,0 +1,17 @@
+customtkinter
+Pillow
+opencv-python
+numpy
+pytesseract
+pyautogui
+google-generativeai
+python-dotenv
+
+# Optional but Recommended for Full Feature Set
+# pywinauto is used by the PerceptionEngine for OS-level event hooks on Windows.
+pywinauto
+
+# Development & Testing Dependencies
+pytest
+flake8
+black
