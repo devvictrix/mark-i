@@ -48,7 +48,7 @@ class GeminiAnalyzer:
         self.safety_settings: Optional[List[Any]] = None
         self.generation_config = DEFAULT_GENERATION_CONFIG
         # --- v18.0.2 REFACTOR: Default model is the first in the fast preference chain ---
-        self.default_model_name = default_model_name or MODEL_PREFERENCE_FAST
+        self.default_model_name = default_model_name or MODEL_PREFERENCE_FAST[0]
         # --- END REFACTOR ---
 
         if not self.api_key or not isinstance(self.api_key, str):
@@ -93,7 +93,7 @@ class GeminiAnalyzer:
                 last_error_response = {"status": "error_api", "error_message": error_msg, "raw_gemini_response": str(e)}
                 break
 
-        last_error_response["model_used"] = model_preference[-1]
+        last_error_response["model_used"] = model_preference[-1] if model_preference else "N/A"
         if last_error_response["status"] == "error_quota":
             last_error_response["error_message"] = "Gemini API quota exceeded for all fallback models. Please check your usage limits."
         return last_error_response
@@ -110,7 +110,11 @@ class GeminiAnalyzer:
                 error_msg = "Input error: Provided image_data is invalid (empty or not NumPy array)."
                 logger.error(f"{log_prefix}: {error_msg}")
                 return None, {"status": "error_input", "error_message": error_msg}
-            if image_data.ndim != 3 or image_data.shape != 3:
+            # --- BUG FIX ---
+            # The original check was `image_data.shape != 3` which is always true for an image.
+            # The correct check is for the number of dimensions and the channel count.
+            if image_data.ndim != 3 or image_data.shape[2] != 3:
+            # --- END BUG FIX ---
                 error_msg = f"Input error: Provided image_data is not a 3-channel (BGR) image. Shape: {image_data.shape}"
                 logger.error(f"{log_prefix}: {error_msg}")
                 return None, {"status": "error_input", "error_message": error_msg}
@@ -128,7 +132,7 @@ class GeminiAnalyzer:
             api_contents.append(pil_image_for_sdk)
         return api_contents, None
 
-    def _process_sdk_response(self, api_sdk_response: Optional[Content], log_prefix: str) -> Dict[str, Any]:
+    def _process_sdk_response(self, api_sdk_response: Optional[Any], log_prefix: str) -> Dict[str, Any]:
         processed_result: Dict[str, Any] = {
             "status": "error_api",
             "text_content": None,
@@ -151,7 +155,7 @@ class GeminiAnalyzer:
             logger.warning(f"{log_prefix}: {processed_result['error_message']}")
             return processed_result
 
-        first_candidate = api_sdk_response.candidates
+        first_candidate = api_sdk_response.candidates[0]
         finish_reason = getattr(first_candidate, "finish_reason", None)
 
         if finish_reason and finish_reason.name.upper() != "STOP":
@@ -214,7 +218,7 @@ class GeminiAnalyzer:
             "text_content": None,
             "json_content": None,
             "error_message": "Client not initialized.",
-            "model_used": effective_model_preference,
+            "model_used": effective_model_preference if effective_model_preference else "N/A",
             "latency_ms": 0,
             "raw_gemini_response": None,
         }
