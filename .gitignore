@@ -36,5 +36,10 @@ htmlcov/
 logs/
 *.log
 
+# Storage - OS-specific data should not be committed
+storage/os/*
+storage/cache/*
+storage/logs/*
+
 # Add knowledge base to prevent accidental commits
 knowledge_base.json

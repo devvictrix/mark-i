@@ -62,6 +62,11 @@ class MainAppWindow(ctk.CTk):
         file_menu.add_command(label="Reload Knowledge Base", command=self.controller.reload_knowledge_base)
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.controller.on_close_window)
+        
+        # Debug menu
+        debug_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label="Debug", menu=debug_menu)
+        debug_menu.add_command(label="👁️ Eye Debug - What I See", command=self.controller.open_eye_debug)
 
         self.grid_columnconfigure(0, weight=2, minsize=300)
         self.grid_columnconfigure(1, weight=5, minsize=500)

@@ -38,6 +38,7 @@ from mark_i.ui.gui.autonomy_confirmation_dialog import AutonomyConfirmationDialo
 from mark_i.ui.gui.knowledge_curator_window import KnowledgeCuratorWindow
 from mark_i.ui.gui.logging_handler import GuiLoggingHandler
 from mark_i.ui.gui.user_input_dialog import UserInputDialog
+from mark_i.ui.gui.simple_eye_debug import SimpleEyeDebugWindow
 
 from mark_i.core.logging_setup import APP_ROOT_LOGGER_NAME
 
@@ -75,6 +76,9 @@ class AppController:
 
         self.gui_log_queue = Queue()
         self._knowledge_discovery_cache: Dict[str, Any] = {}
+        
+        # Eye Debug Window
+        self.eye_debug_window: Optional[SimpleEyeDebugWindow] = None
 
     def initialize_app(self, initial_profile_path: Optional[str]):
         """Initializes engines and populates the UI."""
@@ -308,3 +312,15 @@ class AppController:
         self.knowledge_discovery_engine.start()
         self.view.update_knowledge_status("Learning...")
         self.view.btn_toggle_learning.configure(text="Stop Learning")
+    
+    def open_eye_debug(self):
+        """Open the Eye Debug window to show what MARK-I sees."""
+        try:
+            # Always create a new window to avoid threading issues
+            self.eye_debug_window = SimpleEyeDebugWindow(parent=self.view)
+            self.eye_debug_window.show()
+            logger.info("Eye Debug window opened")
+            
+        except Exception as e:
+            logger.error(f"Failed to open Eye Debug window: {e}")
+            messagebox.showerror("Error", f"Failed to open Eye Debug window:\n{str(e)}", parent=self.view)
