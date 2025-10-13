@@ -19,14 +19,18 @@ from .enhanced_context_engine import EnhancedContextEngine
 from .system_context_integration import SystemContextIntegration
 from .environment_monitor import EnvironmentMonitor
 from .context_driven_optimizer import ContextDrivenOptimizer
+from .adaptive_decision_engine import AdaptiveDecisionEngine
+from .context_history_tracker import ContextHistoryTracker
 
 __all__ = [
-    'ContextManager', 
-    'BaseCollector', 
-    'AIContextProvider', 
+    'ContextManager',
+    'BaseCollector',
+    'AIContextProvider',
     'get_ai_context_provider',
     'EnhancedContextEngine',
     'SystemContextIntegration',
     'EnvironmentMonitor',
-    'ContextDrivenOptimizer'
+    'ContextDrivenOptimizer',
+    'AdaptiveDecisionEngine',
+    'ContextHistoryTracker'
 ]
