@@ -16,6 +16,7 @@ import cv2
 
 # Config and Engine Imports
 from mark_i.core.config_manager import ConfigManager
+from mark_i.core.storage_manager import StorageManager
 from mark_i.engines.capture_engine import CaptureEngine
 from mark_i.engines.gemini_analyzer import GeminiAnalyzer
 from mark_i.engines.action_executor import ActionExecutor
@@ -54,6 +55,9 @@ class AppController:
     def __init__(self, view: ctk.CTk):
         self.view = view
         self.project_root = self._find_project_root()
+        
+        # Initialize storage manager
+        self.storage_manager = StorageManager(self.project_root)
 
         self.user_input_response: str = ""
         self.user_input_event = threading.Event()

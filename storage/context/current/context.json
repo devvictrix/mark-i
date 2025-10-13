@@ -1,0 +1,1475 @@
+{
+  "collection_timestamp": "2025-10-13T12:10:53.683921",
+  "collectors_count": 5,
+  "context": {
+    "context_hardware_collector": {
+      "cpu": {
+        "model": "13th Gen Intel(R) Core(TM) i5-13500H",
+        "architecture": "x86_64",
+        "cores_physical": 12,
+        "cores_logical": 16,
+        "usage_percent": 17.5,
+        "frequency_current": 726.57,
+        "frequency_max": 4100.0,
+        "temperature": 58.0
+      },
+      "memory": {
+        "total_gb": 15.35,
+        "available_gb": 3.48,
+        "used_gb": 11.87,
+        "usage_percent": 77.3,
+        "swap_total_gb": 11.67,
+        "swap_used_gb": 3.04,
+        "swap_usage_percent": 26.0
+      },
+      "gpu": [
+        {
+          "name": "Intel Corporation Raptor Lake-P [Iris Xe Graphics] (rev 04)",
+          "vendor": "Intel",
+          "type": "integrated"
+        }
+      ],
+      "storage": [
+        {
+          "device": "/dev/nvme0n1p2",
+          "mount_point": "/",
+          "filesystem": "ext4",
+          "total_gb": 467.35,
+          "used_gb": 171.79,
+          "free_gb": 271.74,
+          "usage_percent": 36.8
+        },
+        {
+          "device": "/dev/loop0",
+          "mount_point": "/snap/bare/5",
+          "filesystem": "squashfs",
+          "total_gb": 0.0,
+          "used_gb": 0.0,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop1",
+          "mount_point": "/snap/bruno/90",
+          "filesystem": "squashfs",
+          "total_gb": 0.13,
+          "used_gb": 0.13,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop2",
+          "mount_point": "/snap/core20/2669",
+          "filesystem": "squashfs",
+          "total_gb": 0.06,
+          "used_gb": 0.06,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop3",
+          "mount_point": "/snap/core18/2952",
+          "filesystem": "squashfs",
+          "total_gb": 0.05,
+          "used_gb": 0.05,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop4",
+          "mount_point": "/snap/core22/2045",
+          "filesystem": "squashfs",
+          "total_gb": 0.07,
+          "used_gb": 0.07,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop5",
+          "mount_point": "/snap/core22/2133",
+          "filesystem": "squashfs",
+          "total_gb": 0.07,
+          "used_gb": 0.07,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop6",
+          "mount_point": "/snap/firefox/6933",
+          "filesystem": "squashfs",
+          "total_gb": 0.24,
+          "used_gb": 0.24,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop7",
+          "mount_point": "/snap/core24/1196",
+          "filesystem": "squashfs",
+          "total_gb": 0.07,
+          "used_gb": 0.07,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop8",
+          "mount_point": "/snap/discord/256",
+          "filesystem": "squashfs",
+          "total_gb": 0.11,
+          "used_gb": 0.11,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop9",
+          "mount_point": "/snap/firmware-updater/167",
+          "filesystem": "squashfs",
+          "total_gb": 0.01,
+          "used_gb": 0.01,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop10",
+          "mount_point": "/snap/gnome-3-28-1804/198",
+          "filesystem": "squashfs",
+          "total_gb": 0.16,
+          "used_gb": 0.16,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop11",
+          "mount_point": "/snap/firefox/6966",
+          "filesystem": "squashfs",
+          "total_gb": 0.24,
+          "used_gb": 0.24,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop12",
+          "mount_point": "/snap/gnome-42-2204/226",
+          "filesystem": "squashfs",
+          "total_gb": 0.5,
+          "used_gb": 0.5,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop14",
+          "mount_point": "/snap/gtk-common-themes/1535",
+          "filesystem": "squashfs",
+          "total_gb": 0.09,
+          "used_gb": 0.09,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop13",
+          "mount_point": "/snap/gnome-42-2204/202",
+          "filesystem": "squashfs",
+          "total_gb": 0.5,
+          "used_gb": 0.5,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop15",
+          "mount_point": "/snap/gnome-46-2404/125",
+          "filesystem": "squashfs",
+          "total_gb": 0.6,
+          "used_gb": 0.6,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop17",
+          "mount_point": "/snap/mesa-2404/912",
+          "filesystem": "squashfs",
+          "total_gb": 0.28,
+          "used_gb": 0.28,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop16",
+          "mount_point": "/snap/libreoffice/358",
+          "filesystem": "squashfs",
+          "total_gb": 1.17,
+          "used_gb": 1.17,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop18",
+          "mount_point": "/snap/postman/354",
+          "filesystem": "squashfs",
+          "total_gb": 0.17,
+          "used_gb": 0.17,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop19",
+          "mount_point": "/snap/snap-store/1270",
+          "filesystem": "squashfs",
+          "total_gb": 0.01,
+          "used_gb": 0.01,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop20",
+          "mount_point": "/snap/snap-store/1300",
+          "filesystem": "squashfs",
+          "total_gb": 0.02,
+          "used_gb": 0.02,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop21",
+          "mount_point": "/snap/snapd/24792",
+          "filesystem": "squashfs",
+          "total_gb": 0.05,
+          "used_gb": 0.05,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop22",
+          "mount_point": "/snap/snapd-desktop-integration/315",
+          "filesystem": "squashfs",
+          "total_gb": 0.0,
+          "used_gb": 0.0,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/loop23",
+          "mount_point": "/snap/snapd/25202",
+          "filesystem": "squashfs",
+          "total_gb": 0.05,
+          "used_gb": 0.05,
+          "free_gb": 0.0,
+          "usage_percent": 100.0
+        },
+        {
+          "device": "/dev/nvme0n1p1",
+          "mount_point": "/boot/efi",
+          "filesystem": "vfat",
+          "total_gb": 1.05,
+          "used_gb": 0.01,
+          "free_gb": 1.03,
+          "usage_percent": 1.3
+        }
+      ],
+      "displays": [
+        {
+          "name": "Wayland-Display",
+          "resolution": "Unknown",
+          "connected": true,
+          "session_type": "wayland"
+        }
+      ],
+      "system": {
+        "platform": "Linux",
+        "platform_release": "6.14.0-33-generic",
+        "platform_version": "#33~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Sep 19 17:02:30 UTC 2",
+        "hostname": "mark-i",
+        "boot_time": 1760322885.0,
+        "uptime_seconds": 9369.80080318451,
+        "python_version": "3.12.3",
+        "architecture": [
+          "64bit",
+          "ELF"
+        ],
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "environment": {
+          "display": ":0",
+          "wayland_display": "wayland-0",
+          "session_type": "wayland",
+          "desktop_session": "Unity",
+          "user": "devvictrix",
+          "home": "/home/devvictrix",
+          "shell": "/bin/bash",
+          "lang": "en_US.UTF-8"
+        }
+      },
+      "_metadata": {
+        "collector": "Hardware Collector",
+        "collected_at": "2025-10-13T12:10:54.818492",
+        "refresh_interval": 30,
+        "is_expensive": true
+      }
+    },
+    "context_application_collector": {
+      "error": "Failed to collect Application Collector data",
+      "fallback": true,
+      "_metadata": {
+        "collector": "Application Collector",
+        "collected_at": "2025-10-13T12:10:54.870273",
+        "status": "error"
+      }
+    },
+    "context_ui_collector": {
+      "desktop_environment": {
+        "name": "Unity",
+        "session_type": "wayland",
+        "session_desktop": "ubuntu",
+        "gdm_session": "ubuntu",
+        "desktop_session": "ubuntu"
+      },
+      "window_manager": {
+        "name": "Unknown",
+        "version": "Unknown",
+        "compositor": "wayland"
+      },
+      "theme": {
+        "gtk_theme": "Yaru-dark",
+        "icon_theme": "Yaru-dark",
+        "cursor_theme": "DMZ-White",
+        "font": "Sarabun 11",
+        "scaling_factor": 1.0
+      },
+      "workspaces": {
+        "total": 1,
+        "current": 1,
+        "names": []
+      },
+      "active_windows": [],
+      "input_devices": {
+        "keyboards": [
+          {
+            "name": "AT Translated Set 2 keyboard",
+            "handlers": "sysrq kbd event3 leds"
+          },
+          {
+            "name": "Lenovo Lenovo Legion K510 Mini Pro Gaming Keyboard",
+            "handlers": "sysrq kbd event7 leds"
+          },
+          {
+            "name": "Lenovo Lenovo Legion K510 Mini Pro Gaming Keyboard",
+            "handlers": "kbd event8"
+          },
+          {
+            "name": "Lenovo Lenovo Legion K510 Mini Pro Gaming Keyboard",
+            "handlers": "event9"
+          },
+          {
+            "name": "Lenovo Lenovo Legion K510 Mini Pro Gaming Keyboard Mouse",
+            "handlers": "mouse3 event10"
+          }
+        ],
+        "mice": [
+          {
+            "name": "ELAN06FA:00 04F3:327E Mouse",
+            "handlers": "mouse0 event4"
+          },
+          {
+            "name": "Logitech Wireless Receiver Mouse",
+            "handlers": "mouse2 event6"
+          }
+        ],
+        "touchpads": [
+          {
+            "name": "ELAN06FA:00 04F3:327E Touchpad",
+            "handlers": "mouse1 event5"
+          }
+        ],
+        "other": [
+          {
+            "name": "Lid Switch",
+            "handlers": "event0"
+          },
+          {
+            "name": "Sleep Button",
+            "handlers": "kbd event1"
+          },
+          {
+            "name": "Power Button",
+            "handlers": "kbd event2"
+          },
+          {
+            "name": "Intel HID events",
+            "handlers": "rfkill kbd event11"
+          },
+          {
+            "name": "Ideapad extra buttons",
+            "handlers": "rfkill kbd event12"
+          },
+          {
+            "name": "Intel HID 5 button array",
+            "handlers": "kbd event13"
+          },
+          {
+            "name": "Video Bus",
+            "handlers": "kbd event14"
+          },
+          {
+            "name": "HDA Intel PCH Mic",
+            "handlers": "event15"
+          },
+          {
+            "name": "HDA Intel PCH Headphone",
+            "handlers": "event16"
+          },
+          {
+            "name": "HDA Intel PCH HDMI/DP,pcm=3",
+            "handlers": "event17"
+          },
+          {
+            "name": "HDA Intel PCH HDMI/DP,pcm=7",
+            "handlers": "event18"
+          },
+          {
+            "name": "HDA Intel PCH HDMI/DP,pcm=8",
+            "handlers": "event19"
+          },
+          {
+            "name": "HDA Intel PCH HDMI/DP,pcm=9",
+            "handlers": "event20"
+          }
+        ]
+      },
+      "accessibility": {
+        "screen_reader": false,
+        "high_contrast": false,
+        "large_text": false,
+        "magnifier": false,
+        "universal_access": false,
+        "text_scaling_factor": 1.0
+      },
+      "_metadata": {
+        "collector": "UI Collector",
+        "collected_at": "2025-10-13T12:10:54.973222",
+        "refresh_interval": 5,
+        "is_expensive": true
+      }
+    },
+    "context_network_collector": {
+      "interfaces": [
+        {
+          "name": "lo",
+          "is_up": true,
+          "duplex": "unknown",
+          "speed_mbps": null,
+          "mtu": 65536,
+          "addresses": [
+            {
+              "family": "IPv4",
+              "address": "127.0.0.1",
+              "netmask": "255.0.0.0",
+              "broadcast": null
+            },
+            {
+              "family": "IPv6",
+              "address": "::1",
+              "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "00:00:00:00:00:00",
+              "netmask": null,
+              "broadcast": null
+            }
+          ],
+          "type": "loopback",
+          "driver": "unknown",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "wlp0s20f3",
+          "is_up": true,
+          "duplex": "unknown",
+          "speed_mbps": null,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv4",
+              "address": "192.168.1.132",
+              "netmask": "255.255.255.0",
+              "broadcast": "192.168.1.255"
+            },
+            {
+              "family": "IPv6",
+              "address": "2405:9800:bca0:d6d6:9026:b156:d24d:c8d6",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "IPv6",
+              "address": "2405:9800:bca0:d6d6:be8d:3333:2fc2:8e4b",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "IPv6",
+              "address": "fe80::4f1:1c34:fb57:c56e%wlp0s20f3",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "c4:3d:1a:eb:1d:74",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "wireless",
+          "driver": "iwlwifi",
+          "wireless": true,
+          "ssid": "VICTRIX_5G",
+          "signal_strength": "-55",
+          "connection_name": "VICTRIX_5G"
+        },
+        {
+          "name": "docker0",
+          "is_up": false,
+          "duplex": "unknown",
+          "speed_mbps": null,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv4",
+              "address": "172.17.0.1",
+              "netmask": "255.255.0.0",
+              "broadcast": "172.17.255.255"
+            },
+            {
+              "family": "MAC",
+              "address": "56:28:c3:4b:e1:6b",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "bridge",
+          "driver": "bridge",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "br-fc73ff5542f8",
+          "is_up": true,
+          "duplex": "unknown",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv4",
+              "address": "172.18.0.1",
+              "netmask": "255.255.0.0",
+              "broadcast": "172.18.255.255"
+            },
+            {
+              "family": "IPv6",
+              "address": "fe80::c4d2:5cff:fe30:711f%br-fc73ff5542f8",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "c6:d2:5c:30:71:1f",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "bridge",
+          "driver": "bridge",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth445345f",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::c077:2fff:fe2d:f9fb%veth445345f",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "c2:77:2f:2d:f9:fb",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "vetha39c4c4",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::ace9:ccff:fe77:c027%vetha39c4c4",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "ae:e9:cc:77:c0:27",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth22094d9",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::201f:c1ff:fe47:783e%veth22094d9",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "22:1f:c1:47:78:3e",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "vethdfbcaff",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::34d1:72ff:fe8c:e71d%vethdfbcaff",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "36:d1:72:8c:e7:1d",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth9531a55",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::402a:daff:fed4:649a%veth9531a55",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "42:2a:da:d4:64:9a",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth20e9786",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::e8a0:8eff:fe23:ba84%veth20e9786",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "ea:a0:8e:23:ba:84",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "vethb7e2da3",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::dc3d:efff:fe6a:cd5%vethb7e2da3",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "de:3d:ef:6a:0c:d5",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth72fc277",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::f087:f2ff:fe3a:e6e1%veth72fc277",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "f2:87:f2:3a:e6:e1",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth52484cc",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::80b3:48ff:feda:3bfe%veth52484cc",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "82:b3:48:da:3b:fe",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth7a3a1ca",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::a8c5:cbff:fec8:5de1%veth7a3a1ca",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "aa:c5:cb:c8:5d:e1",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth4fb4164",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::7463:67ff:feea:8317%veth4fb4164",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "76:63:67:ea:83:17",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth4404a62",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::6418:1cff:fe81:add%veth4404a62",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "66:18:1c:81:0a:dd",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth42a1cfb",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::e464:87ff:fe62:88f%veth42a1cfb",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "e6:64:87:62:08:8f",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "vethcc08335",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::c863:5aff:feaa:e372%vethcc08335",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "ca:63:5a:aa:e3:72",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth0c3b919",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::9031:2aff:fe3f:2f93%veth0c3b919",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "92:31:2a:3f:2f:93",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth5024850",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::60ac:98ff:feff:f3aa%veth5024850",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "62:ac:98:ff:f3:aa",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "vethb713b20",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::cce7:70ff:feaf:620b%vethb713b20",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "ce:e7:70:af:62:0b",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "vetheba496d",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::6072:aaff:feb5:b243%vetheba496d",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "62:72:aa:b5:b2:43",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth7a4f91b",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::1875:6ff:fecc:4aea%veth7a4f91b",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "1a:75:06:cc:4a:ea",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth64d35d2",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::64e2:deff:fe35:541e%veth64d35d2",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "66:e2:de:35:54:1e",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth0906312",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::1467:7ff:fe27:afd7%veth0906312",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "16:67:07:27:af:d7",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth38153ad",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::943c:55ff:fe48:2ae8%veth38153ad",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "96:3c:55:48:2a:e8",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth808d863",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::b4f0:a3ff:fe42:3f70%veth808d863",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "b6:f0:a3:42:3f:70",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth14c2a95",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::2cfa:9cff:fe79:3441%veth14c2a95",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "2e:fa:9c:79:34:41",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth2b662bf",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::a8aa:e7ff:fe8d:2850%veth2b662bf",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "aa:aa:e7:8d:28:50",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        },
+        {
+          "name": "veth5337b5c",
+          "is_up": true,
+          "duplex": "full",
+          "speed_mbps": 10000,
+          "mtu": 1500,
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::70b8:89ff:fef3:4fa4%veth5337b5c",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "broadcast": null
+            },
+            {
+              "family": "MAC",
+              "address": "72:b8:89:f3:4f:a4",
+              "netmask": null,
+              "broadcast": "ff:ff:ff:ff:ff:ff"
+            }
+          ],
+          "type": "ethernet",
+          "driver": "veth",
+          "wireless": false,
+          "ssid": null,
+          "signal_strength": null
+        }
+      ],
+      "connectivity": {
+        "internet_available": true,
+        "dns_working": true,
+        "public_ip": "58.136.194.43",
+        "gateway": "192.168.1.1",
+        "latency_ms": 15.066,
+        "connection_quality": "excellent",
+        "dns_servers": [
+          "127.0.0.53"
+        ]
+      },
+      "vpn": {
+        "active": false,
+        "connections": [],
+        "type": null
+      },
+      "firewall": {
+        "enabled": false,
+        "type": "unknown",
+        "status": "unknown"
+      },
+      "dns": {
+        "servers": [
+          "127.0.0.53"
+        ],
+        "search_domains": [
+          "."
+        ],
+        "resolver_type": "systemd-resolved"
+      },
+      "routing": {
+        "default_route": "default via 192.168.1.1 dev wlp0s20f3 proto dhcp src 192.168.1.132 metric 600",
+        "routes": [
+          "172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown",
+          "172.18.0.0/16 dev br-fc73ff5542f8 proto kernel scope link src 172.18.0.1",
+          "192.168.1.0/24 dev wlp0s20f3 proto kernel scope link src 192.168.1.132 metric 600"
+        ]
+      },
+      "_metadata": {
+        "collector": "Network Collector",
+        "collected_at": "2025-10-13T12:10:57.695357",
+        "refresh_interval": 5,
+        "is_expensive": true
+      }
+    },
+    "context_user_environment_collector": {
+      "profile": {
+        "username": "devvictrix",
+        "uid": 1000,
+        "gid": 1000,
+        "home_directory": "/home/devvictrix",
+        "shell": "/bin/bash",
+        "real_name": "Panupong Jaengaksorn",
+        "groups": [
+          "adm",
+          "cdrom",
+          "sudo",
+          "dip",
+          "plugdev",
+          "users",
+          "lpadmin",
+          "docker",
+          "devvictrix"
+        ],
+        "sudo_access": false,
+        "home_created": "2025-10-10T20:59:45.257614",
+        "recent_logins": [
+          "devvictr tty2         tty2             Mon Oct 13 09:35   still logged in",
+          "devvictr seat0        login screen     Mon Oct 13 09:35   still logged in",
+          "devvictr tty2         tty2             Sat Oct 11 15:49 - down   (02:09)"
+        ]
+      },
+      "locale": {
+        "language": "en_US.UTF-8",
+        "lc_all": null,
+        "lc_messages": null,
+        "lc_time": null,
+        "lc_numeric": null,
+        "timezone": "Asia/Bangkok",
+        "keyboard_layout": "us",
+        "date_format": "%a %b %e %r %Z %Y",
+        "time_format": "12h"
+      },
+      "working_context": {
+        "current_directory": "/home/devvictrix/personal/projects/mark-i",
+        "recent_directories": [
+          "..",
+          "/home"
+        ],
+        "active_projects": [],
+        "development_tools": [
+          "git",
+          "python",
+          "python3",
+          "node",
+          "npm",
+          "yarn",
+          "gcc",
+          "g++",
+          "make",
+          "docker",
+          "helm",
+          "code",
+          "nano"
+        ],
+        "workspace_info": {
+          "git_repository": "/home/devvictrix/personal/projects/mark-i",
+          "git_info": {
+            "current_branch": "main",
+            "remote_origin": "https://github.com/devvictrix/mark-i.git",
+            "uncommitted_changes": 24,
+            "is_clean": false
+          },
+          "virtual_env": "/home/devvictrix/personal/projects/mark-i/venv"
+        }
+      },
+      "behavior_patterns": {
+        "most_active_hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "preferred_applications": [
+          "docker",
+          "git",
+          "clear",
+          "sudo",
+          "yarn",
+          "cd",
+          "ls",
+          "curl",
+          "npm",
+          "golangci-lint"
+        ],
+        "workflow_patterns": {
+          "development": [
+            "git",
+            "code",
+            "python",
+            "npm",
+            "docker"
+          ],
+          "system_admin": [
+            "sudo",
+            "systemctl",
+            "ps",
+            "top",
+            "grep"
+          ],
+          "file_management": [
+            "ls",
+            "cd",
+            "cp",
+            "mv",
+            "rm",
+            "find"
+          ]
+        },
+        "usage_statistics": {
+          "session_start": "2025-10-13T12:10:57.893246",
+          "shell_sessions_today": 1,
+          "commands_executed_today": 0
+        }
+      },
+      "preferences": {
+        "editor": "Unknown",
+        "pager": "Unknown",
+        "browser": "Unknown",
+        "terminal": "xterm-256color",
+        "shell_preferences": {
+          ".bashrc": {
+            "exists": true,
+            "size": 4128,
+            "modified": "2025-10-10T15:07:27.763481"
+          },
+          ".profile": {
+            "exists": true,
+            "size": 807,
+            "modified": "2024-03-31T15:41:03"
+          }
+        }
+      },
+      "environment_variables": {
+        "PATH": "/home/devvictrix/personal/projects/mark-i/venv/bin:/home/devvictrix/.nvm/versions/node/v22.20.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/local/go/bin:/home/devvictrix/go/bin:/home/devvictrix/.kiro/extensions/ms-python.debugpy-2025.14.0-linux-x64/bundled/scripts/noConfigScripts:/home/devvictrix/.config/Kiro/User/globalStorage/github.copilot-chat/debugCommand:/usr/local/go/bin:/home/devvictrix/go/bin",
+        "HOME": "/home/devvictrix",
+        "USER": "devvictrix",
+        "SHELL": "/bin/bash",
+        "TERM": "xterm-256color",
+        "LANG": "en_US.UTF-8",
+        "DISPLAY": ":0",
+        "WAYLAND_DISPLAY": "wayland-0",
+        "XDG_CURRENT_DESKTOP": "Unity",
+        "XDG_SESSION_TYPE": "wayland",
+        "VIRTUAL_ENV": "/home/devvictrix/personal/projects/mark-i/venv"
+      },
+      "_metadata": {
+        "collector": "User Environment Collector",
+        "collected_at": "2025-10-13T12:10:57.893657",
+        "refresh_interval": 300,
+        "is_expensive": true
+      }
+    }
+  }
+}

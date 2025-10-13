@@ -1,0 +1,75 @@
+{
+  "id": "fdf89732-12a1-44ab-a183-768b80e0e5ef",
+  "name": "Test Email Profile",
+  "description": "Test profile for email automation",
+  "category": "email",
+  "target_application": "Gmail",
+  "created_at": "2025-10-13T12:28:01.648967",
+  "modified_at": "2025-10-13T12:28:01.649225",
+  "version": "1.0.0",
+  "regions": [
+    {
+      "name": "test_region",
+      "x": 0,
+      "y": 0,
+      "width": 100,
+      "height": 100,
+      "description": "Test region",
+      "monitor_index": 0,
+      "is_relative": false,
+      "parent_region": null,
+      "expected_colors": null,
+      "template_image": null,
+      "ocr_enabled": false,
+      "retry_count": 3,
+      "timeout_seconds": 5
+    }
+  ],
+  "rules": [
+    {
+      "name": "Test Rule",
+      "description": "Test rule",
+      "enabled": true,
+      "priority": 0,
+      "conditions": [
+        {
+          "type": "always_true",
+          "region": "test_region",
+          "parameters": {},
+          "negate": false
+        }
+      ],
+      "logical_operator": "AND",
+      "actions": [
+        {
+          "type": "click",
+          "region": "test_region",
+          "parameters": {},
+          "delay_before": 0.0,
+          "delay_after": 0.0
+        }
+      ],
+      "max_retries": 3,
+      "retry_delay": 1.0,
+      "continue_on_failure": false
+    }
+  ],
+  "settings": {
+    "monitoring_interval_seconds": 1.0,
+    "max_execution_time_seconds": 300,
+    "screenshot_on_error": true,
+    "log_level": "INFO",
+    "template_match_threshold": 0.8,
+    "ocr_confidence_threshold": 60,
+    "color_tolerance": 10,
+    "action_delay_multiplier": 1.0,
+    "retry_on_failure": true,
+    "ask_user_timeout_seconds": 30,
+    "use_gemini_analysis": true,
+    "gemini_model": "gemini-1.5-flash-latest"
+  },
+  "tags": [],
+  "author": "user",
+  "is_template": false,
+  "parent_template": null
+}

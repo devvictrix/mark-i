@@ -1,5 +1,5 @@
 {
-    "profile_description": "A basic example to demonstrate core functionalities like region definition, average color checking, and conditional logging. Also shows basic settings.",
+    "profile_description": "Basic example profile demonstrating core MARK-I automation functionalities including region monitoring, color detection, conditional logging, and OCR text recognition. Perfect for learning the fundamentals of profile creation.",
     "settings": {
         "monitoring_interval_seconds": 3.0,
         "analysis_dominant_colors_k": 3,

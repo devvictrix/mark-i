@@ -1,0 +1,18 @@
+[
+  {
+    "pattern_id": "context_-6533666224992824633",
+    "context_features": {
+      "hour_of_day": 18,
+      "day_of_week": 0,
+      "active_app_count": 3,
+      "primary_app_category": "development",
+      "user_activity": "coding"
+    },
+    "preferred_focus_strategy": "adaptive",
+    "effectiveness_history": [
+      0.7
+    ],
+    "confidence": 0.5,
+    "last_updated": "2025-10-13T18:30:37.252515"
+  }
+]
