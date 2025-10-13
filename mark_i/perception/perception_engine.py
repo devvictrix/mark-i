@@ -11,12 +11,12 @@ from mark_i.core.logging_setup import APP_ROOT_LOGGER_NAME
 # gracefully handle the case where win32hooks cannot be imported.
 try:
     from pywinauto import win32hooks
+    from pywinauto.win32functions import GetWindowText
 except ImportError:
     win32hooks = None
+    GetWindowText = None
     # This line will no longer crash because APP_ROOT_LOGGER_NAME is now imported.
-    logging.getLogger(f"{APP_ROOT_LOGGER_NAME}.perception.perception_engine").warning("pywinauto.win32hooks could not be imported. OS event perception will be disabled.")
-
-from pywinauto.win32functions import GetWindowText
+    logging.getLogger(f"{APP_ROOT_LOGGER_NAME}.perception.perception_engine").warning("pywinauto.win32hooks could not be imported. OS event perception will be disabled (Windows-only feature).")
 
 from mark_i.engines.capture_engine import CaptureEngine
 

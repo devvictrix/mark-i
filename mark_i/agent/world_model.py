@@ -1,9 +1,59 @@
 import logging
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
+import numpy as np
 
 from mark_i.core.logging_setup import APP_ROOT_LOGGER_NAME
 
 logger = logging.getLogger(f"{APP_ROOT_LOGGER_NAME}.agent.world_model")
+
+# Entity analysis prompt template with perceptual filtering
+ENTITY_ANALYSIS_PROMPT_WITH_FILTERING = """
+Analyze the provided screenshot and identify all interactive UI elements, buttons, text fields, and other interface components.
+
+IMPORTANT: Ignore any elements that match these descriptions:
+{ignore_list_formatted}
+
+For each relevant element you find, provide:
+1. Element type (button, text_field, label, etc.)
+2. Descriptive text or label
+3. Approximate bounding box coordinates
+4. Current state (enabled/disabled, focused/unfocused, etc.)
+
+Do not include any elements that match the ignore list descriptions above.
+
+Respond with a JSON array of detected elements in this format:
+[
+  {{
+    "type": "button",
+    "text": "Login",
+    "box": [x, y, width, height],
+    "state": "enabled",
+    "found": true
+  }}
+]
+"""
+
+# Standard entity analysis prompt (without filtering)
+ENTITY_ANALYSIS_PROMPT = """
+Analyze the provided screenshot and identify all interactive UI elements, buttons, text fields, and other interface components.
+
+For each element you find, provide:
+1. Element type (button, text_field, label, etc.)
+2. Descriptive text or label
+3. Approximate bounding box coordinates
+4. Current state (enabled/disabled, focused/unfocused, etc.)
+
+Respond with a JSON array of detected elements in this format:
+[
+  {{
+    "type": "button",
+    "text": "Login",
+    "box": [x, y, width, height],
+    "state": "enabled",
+    "found": true
+  }}
+]
+"""
 
 class WorldModel:
     """
@@ -90,3 +140,66 @@ class WorldModel:
             transcript += f"Observation: {observation}\n"
             transcript += "--------------------\n"
         return transcript
+
+    def update_entities(self, screenshot: np.ndarray, ignore_list: Optional[List[str]] = None, gemini_analyzer=None) -> List[Dict[str, Any]]:
+        """
+        Updates the current understanding of UI entities, applying perceptual filtering.
+        
+        Args:
+            screenshot: Current screen capture as numpy array
+            ignore_list: List of element descriptions to ignore during analysis
+            gemini_analyzer: GeminiAnalyzer instance for vision analysis
+            
+        Returns:
+            Filtered list of detected entities
+        """
+        if gemini_analyzer is None:
+            logger.warning("No GeminiAnalyzer provided to update_entities. Returning empty entity list.")
+            return []
+            
+        try:
+            # Choose prompt based on whether we have an ignore list
+            if ignore_list and len(ignore_list) > 0:
+                # Format ignore list for the prompt
+                ignore_list_formatted = "\n".join([f"- {item}" for item in ignore_list])
+                prompt = ENTITY_ANALYSIS_PROMPT_WITH_FILTERING.format(ignore_list_formatted=ignore_list_formatted)
+                logger.info(f"Analyzing entities with {len(ignore_list)} items in ignore list")
+            else:
+                prompt = ENTITY_ANALYSIS_PROMPT
+                logger.info("Analyzing entities without filtering")
+            
+            # Query the vision model
+            from mark_i.core.app_config import MODEL_PREFERENCE_FAST
+            response = gemini_analyzer.query_vision_model(
+                prompt=prompt,
+                image_data=screenshot,
+                model_preference=MODEL_PREFERENCE_FAST
+            )
+            
+            if response["status"] == "success" and response.get("json_content"):
+                entities = response["json_content"]
+                if isinstance(entities, list):
+                    # Filter out invalid entities
+                    valid_entities = []
+                    for entity in entities:
+                        if isinstance(entity, dict) and entity.get("found", False):
+                            valid_entities.append(entity)
+                    
+                    self.entities = valid_entities
+                    logger.info(f"Updated WorldModel with {len(valid_entities)} entities")
+                    
+                    if ignore_list:
+                        filtered_count = len(entities) - len(valid_entities)
+                        logger.info(f"Perceptual filtering removed {filtered_count} entities")
+                    
+                    return valid_entities
+                else:
+                    logger.warning("Entity analysis returned non-list result")
+                    return []
+            else:
+                logger.warning(f"Entity analysis failed: {response.get('error_message', 'Unknown error')}")
+                return []
+                
+        except Exception as e:
+            logger.error(f"Error updating entities: {e}", exc_info=True)
+            return []

@@ -40,6 +40,38 @@ DEFAULT_SAFETY_SETTINGS_DATA: List[Dict[str, Any]] = [
 ]
 DEFAULT_GENERATION_CONFIG = GenerationConfig()
 
+# --- Focused Context Execution Constants ---
+# Confidence threshold for application detection (0.0 to 1.0)
+FOCUSED_CONTEXT_CONFIDENCE_THRESHOLD = 0.7
+
+# Minimum window dimensions for focused context (width, height in pixels)
+FOCUSED_CONTEXT_MIN_WINDOW_SIZE = (100, 100)
+
+# Application detection prompt template for identifying target application windows
+APPLICATION_DETECTION_PROMPT = """
+Analyze the screenshot and identify the primary application window that would be most relevant for this command: "{command}"
+
+Look for:
+1. The main application window that the user likely wants to interact with
+2. Active/focused windows vs background windows  
+3. Dialog boxes or modal windows that might be part of the target application
+
+Respond with a JSON object containing the bounding box of the target application window:
+{{
+  "found_target_application": true/false,
+  "application_name": "detected application name",
+  "bounding_box": {{
+    "x": left_coordinate,
+    "y": top_coordinate, 
+    "width": window_width,
+    "height": window_height
+  }},
+  "confidence": 0.0-1.0
+}}
+
+If no clear target application can be identified, set found_target_application to false.
+"""
+
 
 class GeminiAnalyzer:
     def __init__(self, api_key: str, default_model_name: Optional[str] = None):

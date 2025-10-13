@@ -1,16 +1,17 @@
 import logging
 import json
 import time
-from typing import Dict, Any, Optional, List, Callable
+from typing import Dict, Any, Optional, List, Callable, Tuple
 from datetime import datetime, timezone
 
 import numpy as np
 
 from mark_i.knowledge.knowledge_base import KnowledgeBase
 from mark_i.engines.capture_engine import CaptureEngine
-from mark_i.engines.gemini_analyzer import GeminiAnalyzer
+from mark_i.engines.gemini_analyzer import GeminiAnalyzer, APPLICATION_DETECTION_PROMPT, FOCUSED_CONTEXT_CONFIDENCE_THRESHOLD, FOCUSED_CONTEXT_MIN_WINDOW_SIZE
 from mark_i.engines.gemini_decision_module import GeminiDecisionModule
 from mark_i.generation.strategy_planner import IntermediatePlan
+from mark_i.core.app_config import MODEL_PREFERENCE_FAST
 
 from mark_i.core.logging_setup import APP_ROOT_LOGGER_NAME
 
@@ -319,13 +320,63 @@ class StrategicExecutor:
 
             self._send_status_update("tactic_before_image", {"image_np": pre_action_screenshot})
 
-            fullscreen_context = {"fullscreen_region_config": {"x": 0, "y": 0, "width": self.capture_engine.get_primary_screen_width(), "height": self.capture_engine.get_primary_screen_height()}}
-            tactical_result = self.gemini_decision_module.execute_nlu_task(
-                task_rule_name=f"StrategicTask_Step{current_step_index + 1}",
-                natural_language_command=goal,
-                initial_context_images={"fullscreen": pre_action_screenshot},
-                task_parameters={"context_region_names": ["fullscreen"], "require_confirmation_per_step": False, **fullscreen_context},
-            )
+            # Determine focused context for this tactical step
+            focused_context_result = self._determine_and_crop_context(goal, pre_action_screenshot)
+            
+            # Create context dictionary with focused context information
+            if focused_context_result["use_focused_context"]:
+                # Use focused context
+                cropped_image = focused_context_result["cropped_image"]
+                coordinate_offset = focused_context_result["coordinate_offset"]
+                bounding_box = focused_context_result["bounding_box"]
+                
+                context = {
+                    "use_focused_context": True,
+                    "coordinate_offset": coordinate_offset,
+                    "original_screen_dimensions": (self.capture_engine.get_primary_screen_width(), self.capture_engine.get_primary_screen_height()),
+                    "focused_region_config": {
+                        "x": bounding_box["x"],
+                        "y": bounding_box["y"], 
+                        "width": bounding_box["width"],
+                        "height": bounding_box["height"]
+                    }
+                }
+                
+                logger.info(f"Using focused context: {bounding_box['width']}x{bounding_box['height']} at ({bounding_box['x']}, {bounding_box['y']})")
+                self._send_status_update("focused_context_active", {
+                    "application": focused_context_result["application_name"],
+                    "confidence": focused_context_result["confidence"],
+                    "region": bounding_box
+                })
+                
+                tactical_result = self.gemini_decision_module.execute_nlu_task(
+                    task_rule_name=f"StrategicTask_Step{current_step_index + 1}",
+                    natural_language_command=goal,
+                    initial_context_images={"focused": cropped_image},
+                    task_parameters={"context_region_names": ["focused"], "require_confirmation_per_step": False, **context},
+                )
+            else:
+                # Use full-screen context (backward compatibility)
+                context = {
+                    "use_focused_context": False,
+                    "coordinate_offset": (0, 0),
+                    "original_screen_dimensions": (self.capture_engine.get_primary_screen_width(), self.capture_engine.get_primary_screen_height()),
+                    "fullscreen_region_config": {
+                        "x": 0, 
+                        "y": 0, 
+                        "width": self.capture_engine.get_primary_screen_width(), 
+                        "height": self.capture_engine.get_primary_screen_height()
+                    }
+                }
+                
+                logger.info("Using full-screen context")
+                
+                tactical_result = self.gemini_decision_module.execute_nlu_task(
+                    task_rule_name=f"StrategicTask_Step{current_step_index + 1}",
+                    natural_language_command=goal,
+                    initial_context_images={"fullscreen": pre_action_screenshot},
+                    task_parameters={"context_region_names": ["fullscreen"], "require_confirmation_per_step": False, **context},
+                )
 
             if tactical_result.get("status") != "success":
                 final_result_message = f"Step {current_step_index + 1} ('{goal}') failed during execution: {tactical_result.get('message')}"
@@ -398,3 +449,125 @@ class StrategicExecutor:
                 {"name": "strategic_step_capture", "x": 0, "y": 0, "width": self.capture_engine.get_primary_screen_width(), "height": self.capture_engine.get_primary_screen_height()}
             )
         return None
+
+    def _determine_and_crop_context(self, command: str, full_screenshot: np.ndarray) -> Dict[str, Any]:
+        """
+        Analyzes the command and screenshot to determine if focused context should be used.
+        
+        Args:
+            command: User's natural language command
+            full_screenshot: Full screen capture as numpy array
+            
+        Returns:
+            Dictionary containing:
+            - use_focused_context: bool
+            - cropped_image: np.ndarray (if focused)
+            - coordinate_offset: Tuple[int, int] (x, y offset from screen origin)
+            - bounding_box: Dict with x, y, width, height
+            - application_name: str (detected application name)
+            - confidence: float (detection confidence)
+        """
+        logger.info(f"Determining focused context for command: '{command}'")
+        
+        # Default result for full-screen execution
+        result = {
+            "use_focused_context": False,
+            "cropped_image": None,
+            "coordinate_offset": (0, 0),
+            "bounding_box": None,
+            "application_name": None,
+            "confidence": 0.0
+        }
+        
+        try:
+            # Query GeminiAnalyzer with APPLICATION_DETECTION_PROMPT
+            prompt = APPLICATION_DETECTION_PROMPT.format(command=command)
+            response = self.gemini_analyzer.query_vision_model(
+                prompt=prompt,
+                image_data=full_screenshot,
+                model_preference=MODEL_PREFERENCE_FAST
+            )
+            
+            if response["status"] != "success" or not response.get("json_content"):
+                logger.warning(f"Application detection failed: {response.get('error_message', 'Unknown error')}")
+                return result
+                
+            detection_data = response["json_content"]
+            
+            # Check if target application was found
+            if not detection_data.get("found_target_application", False):
+                logger.info("No target application detected, using full-screen context")
+                return result
+                
+            # Extract detection results
+            bounding_box = detection_data.get("bounding_box", {})
+            confidence = detection_data.get("confidence", 0.0)
+            application_name = detection_data.get("application_name", "Unknown")
+            
+            logger.info(f"Detected application: '{application_name}' with confidence: {confidence}")
+            
+            # Check confidence threshold
+            if confidence < FOCUSED_CONTEXT_CONFIDENCE_THRESHOLD:
+                logger.info(f"Confidence {confidence} below threshold {FOCUSED_CONTEXT_CONFIDENCE_THRESHOLD}, using full-screen context")
+                return result
+                
+            # Validate bounding box
+            if not self._validate_bounding_box(bounding_box, full_screenshot.shape[1], full_screenshot.shape[0]):
+                logger.warning("Invalid bounding box detected, using full-screen context")
+                return result
+                
+            # Crop the image
+            x, y, w, h = bounding_box["x"], bounding_box["y"], bounding_box["width"], bounding_box["height"]
+            cropped_image = full_screenshot[y:y+h, x:x+w]
+            
+            if cropped_image.size == 0:
+                logger.warning("Cropping resulted in empty image, using full-screen context")
+                return result
+                
+            # Success! Return focused context result
+            result.update({
+                "use_focused_context": True,
+                "cropped_image": cropped_image,
+                "coordinate_offset": (x, y),
+                "bounding_box": bounding_box,
+                "application_name": application_name,
+                "confidence": confidence
+            })
+            
+            logger.info(f"Successfully created focused context: {w}x{h} at ({x}, {y})")
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error in focused context determination: {e}", exc_info=True)
+            return result
+
+    def _validate_bounding_box(self, bbox: Dict[str, int], screen_width: int, screen_height: int) -> bool:
+        """Validates that bounding box is within screen boundaries and has positive dimensions."""
+        try:
+            x, y, w, h = bbox.get("x", 0), bbox.get("y", 0), bbox.get("width", 0), bbox.get("height", 0)
+            
+            # Check for positive dimensions
+            if w <= 0 or h <= 0:
+                logger.warning(f"Invalid dimensions: width={w}, height={h}")
+                return False
+                
+            # Check minimum window size
+            min_w, min_h = FOCUSED_CONTEXT_MIN_WINDOW_SIZE
+            if w < min_w or h < min_h:
+                logger.warning(f"Window too small: {w}x{h}, minimum required: {min_w}x{min_h}")
+                return False
+                
+            # Check screen boundaries
+            if x < 0 or y < 0:
+                logger.warning(f"Negative coordinates: x={x}, y={y}")
+                return False
+                
+            if x + w > screen_width or y + h > screen_height:
+                logger.warning(f"Bounding box exceeds screen: ({x}, {y}, {w}, {h}) vs screen ({screen_width}, {screen_height})")
+                return False
+                
+            return True
+            
+        except (KeyError, TypeError, ValueError) as e:
+            logger.warning(f"Bounding box validation error: {e}")
+            return False

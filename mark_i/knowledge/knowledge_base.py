@@ -144,9 +144,10 @@ class KnowledgeBase:
 
     def add_to_perceptual_ignore_list(self, item_description: str) -> bool:
         """Adds a new item description to the perceptual ignore list and saves."""
-        if not item_description or not isinstance(item_description, str):
+        if not self._validate_ignore_description(item_description):
             return False
 
+        item_description = item_description.strip()
         filters = self.knowledge_data.setdefault("perceptual_filters", {})
         ignore_list = filters.setdefault("ignore_list", [])
 
@@ -157,3 +158,64 @@ class KnowledgeBase:
 
         logger.debug(f"'{item_description}' already in perceptual ignore list.")
         return True  # It's already there, so the state is correct.
+
+    def remove_from_perceptual_ignore_list(self, item_description: str) -> bool:
+        """Removes an item description from the perceptual ignore list."""
+        if not item_description or not isinstance(item_description, str):
+            logger.warning("Invalid item description provided for removal.")
+            return False
+
+        filters = self.knowledge_data.get("perceptual_filters", {})
+        ignore_list = filters.get("ignore_list", [])
+
+        if item_description in ignore_list:
+            ignore_list.remove(item_description)
+            logger.info(f"Removed '{item_description}' from perceptual ignore list.")
+            return self.save_knowledge_base()
+        else:
+            logger.warning(f"'{item_description}' not found in perceptual ignore list.")
+            return False
+
+    def get_perceptual_ignore_list_formatted(self) -> str:
+        """Returns the ignore list formatted for inclusion in AI prompts."""
+        ignore_list = self.get_perceptual_ignore_list()
+        
+        if not ignore_list:
+            return "No items to ignore."
+        
+        # Format as numbered list for clarity in AI prompts
+        formatted_items = []
+        for i, item in enumerate(ignore_list, 1):
+            formatted_items.append(f"{i}. {item}")
+        
+        return "\n".join(formatted_items)
+
+    def clear_perceptual_ignore_list(self) -> bool:
+        """Clears all items from the perceptual ignore list."""
+        filters = self.knowledge_data.setdefault("perceptual_filters", {})
+        ignore_list = filters.get("ignore_list", [])
+        
+        if ignore_list:
+            item_count = len(ignore_list)
+            filters["ignore_list"] = []
+            logger.info(f"Cleared {item_count} items from perceptual ignore list.")
+            return self.save_knowledge_base()
+        else:
+            logger.info("Perceptual ignore list was already empty.")
+            return True
+
+    def _validate_ignore_description(self, description: str) -> bool:
+        """Validates that an ignore description is suitable for filtering."""
+        if not description or not isinstance(description, str):
+            return False
+        
+        stripped = description.strip()
+        if len(stripped) < 3:
+            logger.warning(f"Ignore description too short: '{description}'")
+            return False
+            
+        if len(stripped) > 200:
+            logger.warning(f"Ignore description too long: '{description}'")
+            return False
+            
+        return True

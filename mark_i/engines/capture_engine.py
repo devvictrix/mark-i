@@ -1,11 +1,14 @@
 import logging
 import platform  # To identify the operating system for platform-specific notes/warnings
 from typing import Optional, Dict, Any
+import subprocess
+import tempfile
+import os
 
 import numpy as np
 from PIL import Image, ImageGrab, UnidentifiedImageError  # Pillow's ImageGrab for screen capture
 import cv2  # OpenCV for color conversion (RGB/RGBA from PIL to BGR for internal use)
-import pyautogui # For reliably getting screen dimensions
+import pyautogui  # For reliably getting screen dimensions
 
 # Standardized logger for this module
 from mark_i.core.logging_setup import APP_ROOT_LOGGER_NAME
@@ -25,6 +28,7 @@ class CaptureEngine:
     def __init__(self):
         """Initializes the CaptureEngine, logs the OS, and determines screen dimensions."""
         self.system = platform.system()
+        self.use_scrot = False
         logger.info(f"CaptureEngine initialized. Operating System: {self.system}.")
 
         if self.system == "Windows":
@@ -32,13 +36,34 @@ class CaptureEngine:
         elif self.system == "Darwin":  # macOS
             logger.info("Capture method: Pillow ImageGrab.grab() for macOS. Ensure screen recording permissions are granted if issues occur.")
         elif self.system == "Linux":
-            logger.info("Capture method: Pillow ImageGrab.grab() for Linux. May require 'scrot' or an X server.")
+            # Check for available screen capture tools on Linux
+            # Priority: gnome-screenshot (GNOME/Unity) > grim (Wayland) > scrot (X11)
+            try:
+                subprocess.run(["which", "gnome-screenshot"], check=True, capture_output=True)
+                self.use_scrot = True
+                self.capture_tool = "gnome-screenshot"
+                logger.info("Capture method: gnome-screenshot (GNOME/Unity Wayland/X11 compatible).")
+            except subprocess.CalledProcessError:
+                try:
+                    subprocess.run(["which", "grim"], check=True, capture_output=True)
+                    self.use_scrot = True
+                    self.capture_tool = "grim"
+                    logger.info("Capture method: grim (Wayland screen capture tool) - Native Wayland support.")
+                except subprocess.CalledProcessError:
+                    try:
+                        subprocess.run(["which", "scrot"], check=True, capture_output=True)
+                        self.use_scrot = True
+                        self.capture_tool = "scrot"
+                        logger.info("Capture method: scrot (X11 screen capture tool).")
+                    except subprocess.CalledProcessError:
+                        self.capture_tool = None
+                        logger.warning("No screen capture tool found (gnome-screenshot, grim, or scrot). Falling back to Pillow ImageGrab (may not work on Wayland).")
+                        logger.info("Capture method: Pillow ImageGrab.grab() for Linux. May require 'scrot' or an X server.")
         else:
             logger.warning(f"Capture method: Pillow ImageGrab.grab() for unrecognized OS '{self.system}'. Capture behavior may vary.")
 
         # --- NEW: System Metrics for screen size ---
         self.system_metrics = self._get_system_metrics()
-
 
     def _get_system_metrics(self) -> Dict[str, Any]:
         """Gathers and stores key system metrics, primarily screen dimensions."""
@@ -50,8 +75,8 @@ class CaptureEngine:
             metrics["primary_screen_height"] = height
             logger.info(f"Detected primary screen dimensions: {width}x{height}")
         except Exception as e:
-            metrics["primary_screen_width"] = 1920 # Fallback
-            metrics["primary_screen_height"] = 1080 # Fallback
+            metrics["primary_screen_width"] = 1920  # Fallback
+            metrics["primary_screen_height"] = 1080  # Fallback
             logger.error(f"Failed to get screen dimensions using PyAutoGUI: {e}. Falling back to default 1920x1080.", exc_info=True)
         return metrics
 
@@ -62,6 +87,66 @@ class CaptureEngine:
     def get_primary_screen_height(self) -> int:
         """Returns the detected height of the primary screen."""
         return self.system_metrics.get("primary_screen_height", 1080)
+
+    def _capture_with_linux_tool(self, bbox: tuple) -> Optional[Image.Image]:
+        """
+        Captures screen region using gnome-screenshot, grim (Wayland), or scrot (X11) on Linux.
+
+        Args:
+            bbox: Tuple of (left, top, right, bottom)
+
+        Returns:
+            PIL Image or None if capture fails
+        """
+        left, top, right, bottom = bbox
+        width = right - left
+        height = bottom - top
+
+        # Create temporary file for output
+        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp_file:
+            tmp_path = tmp_file.name
+
+        try:
+            if self.capture_tool == "gnome-screenshot":
+                # gnome-screenshot: capture full screen then crop
+                # -f for file output, no window border decoration
+                cmd = ["gnome-screenshot", "-f", tmp_path]
+            elif self.capture_tool == "grim":
+                # grim format: grim -g "x,y widthxheight" output.png
+                cmd = ["grim", "-g", f"{left},{top} {width}x{height}", tmp_path]
+            else:  # scrot
+                # For scrot, capture full screen then crop (more reliable)
+                cmd = ["scrot", tmp_path]
+
+            result = subprocess.run(cmd, capture_output=True, timeout=5)
+
+            if result.returncode == 0 and os.path.exists(tmp_path) and os.path.getsize(tmp_path) > 0:
+                # Load the screenshot
+                img = Image.open(tmp_path)
+
+                # If using gnome-screenshot or scrot, crop to desired region
+                if self.capture_tool in ["gnome-screenshot", "scrot"]:
+                    img = img.crop((left, top, right, bottom))
+
+                return img
+            else:
+                stderr_msg = result.stderr.decode() if result.stderr else "No error message"
+                logger.error(f"{self.capture_tool} capture failed. Return code: {result.returncode}, stderr: {stderr_msg}")
+                return None
+
+        except subprocess.TimeoutExpired:
+            logger.error(f"{self.capture_tool} capture timed out after 5 seconds")
+            return None
+        except Exception as e:
+            logger.error(f"Error during {self.capture_tool} capture: {e}", exc_info=True)
+            return None
+        finally:
+            # Clean up temporary file
+            try:
+                if os.path.exists(tmp_path):
+                    os.unlink(tmp_path)
+            except Exception as e:
+                logger.warning(f"Failed to delete temporary capture file {tmp_path}: {e}")
 
     def capture_region(self, region_spec: Dict[str, Any]) -> Optional[np.ndarray]:
         """
@@ -113,12 +198,16 @@ class CaptureEngine:
         logger.debug(f"{log_prefix}: Attempting capture with BoundingBox (L,T,R,B): {bbox_to_capture}")
 
         try:
-            # `all_screens=True` is crucial for multi-monitor setups to ensure coordinates
-            # are interpreted correctly relative to the entire virtual screen desktop.
-            captured_pil_image: Optional[Image.Image] = ImageGrab.grab(bbox=bbox_to_capture, all_screens=True)
+            # Use grim/scrot for Linux if available, otherwise fall back to ImageGrab
+            if self.system == "Linux" and self.use_scrot:
+                captured_pil_image = self._capture_with_linux_tool(bbox_to_capture)
+            else:
+                # `all_screens=True` is crucial for multi-monitor setups to ensure coordinates
+                # are interpreted correctly relative to the entire virtual screen desktop.
+                captured_pil_image = ImageGrab.grab(bbox=bbox_to_capture, all_screens=True)
 
             if captured_pil_image is None:
-                logger.error(f"{log_prefix}: Capture FAILED. Pillow ImageGrab.grab() returned None for BBox {bbox_to_capture}. This might indicate coordinates are off-screen or an OS-level issue.")
+                logger.error(f"{log_prefix}: Capture FAILED. Screen capture returned None for BBox {bbox_to_capture}. This might indicate coordinates are off-screen or an OS-level issue.")
                 return None
 
             logger.debug(f"{log_prefix}: Pillow capture successful. PIL Mode: {captured_pil_image.mode}, Size: {captured_pil_image.size}. Commencing conversion to OpenCV BGR format.")

@@ -1,7 +1,6 @@
 import logging
-import os
 import time
-from typing import Dict, Any, Optional, List, Union, Tuple  # Added Tuple
+from typing import Dict, Any, Optional, Union, Tuple
 
 import pyautogui
 
@@ -76,10 +75,36 @@ class ActionExecutor:
             return converted_value
         return None
 
+    def _apply_coordinate_offset(self, relative_coords: Tuple[int, int], context: Dict[str, Any]) -> Tuple[int, int]:
+        """
+        Translates relative coordinates (from cropped context) to absolute screen coordinates.
+        
+        Args:
+            relative_coords: (x, y) coordinates relative to cropped image or region
+            context: Context dictionary containing coordinate_offset
+            
+        Returns:
+            Absolute screen coordinates
+        """
+        try:
+            # Check if focused context is being used
+            if context.get("use_focused_context", False):
+                offset = context.get("coordinate_offset", (0, 0))
+                absolute_coords = (relative_coords[0] + offset[0], relative_coords[1] + offset[1])
+                logger.debug(f"Applied coordinate offset {offset}: {relative_coords} -> {absolute_coords}")
+                return absolute_coords
+            else:
+                # No offset needed for full-screen context
+                return relative_coords
+        except Exception as e:
+            logger.warning(f"Error applying coordinate offset: {e}. Using original coordinates.")
+            return relative_coords
+
     def _get_target_coords(self, action_spec: Dict[str, Any], context: Dict[str, Any]) -> Optional[Tuple[int, int]]:
         """
         Calculates target (x, y) absolute screen coordinates.
         v10.0.5 Update: Relies on `context['region_configs']` instead of a ConfigManager.
+        v18.0.0 Update: Applies coordinate offset for focused context execution.
         """
         target_relation = action_spec.get("target_relation")
         action_type_for_log = action_spec.get("type", "unknown_action")
@@ -90,7 +115,9 @@ class ActionExecutor:
             x_abs = self._validate_and_convert_numeric_param(action_spec.get("x"), "x_abs", int, action_type_for_log, rule_name_for_log)
             y_abs = self._validate_and_convert_numeric_param(action_spec.get("y"), "y_abs", int, action_type_for_log, rule_name_for_log)
             if x_abs is not None and y_abs is not None:
-                return x_abs, y_abs
+                # Apply coordinate offset for focused context
+                final_coords = self._apply_coordinate_offset((int(x_abs), int(y_abs)), context)
+                return final_coords
             return None
 
         region_configs_from_context = context.get("region_configs", {})
@@ -127,9 +154,13 @@ class ActionExecutor:
 
             rel_x, rel_y, w, h = [int(c) for c in box_rel]
             if target_relation == "center_of_gemini_element":
-                return base_x + rel_x + w // 2, base_y + rel_y + h // 2
+                relative_coords = (int(base_x + rel_x + w // 2), int(base_y + rel_y + h // 2))
             else:  # top_left
-                return base_x + rel_x, base_y + rel_y
+                relative_coords = (int(base_x + rel_x), int(base_y + rel_y))
+            
+            # Apply coordinate offset for focused context
+            final_coords = self._apply_coordinate_offset(relative_coords, context)
+            return final_coords
 
         # Legacy relations (can be removed later or adapted to use context)
         # ...

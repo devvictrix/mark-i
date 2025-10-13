@@ -91,6 +91,22 @@ class AgentCore:
             )
         return None
 
+    def _update_world_model_entities(self, world_model: WorldModel, screenshot: np.ndarray):
+        """Updates the world model with current screen entities, applying perceptual filtering."""
+        try:
+            ignore_list = self.knowledge_base.get_perceptual_ignore_list()
+            entities = world_model.update_entities(screenshot, ignore_list, self.gemini_analyzer)
+            
+            if ignore_list:
+                logger.info(f"Updated world model with {len(entities)} entities (filtered with {len(ignore_list)} ignore rules)")
+            else:
+                logger.info(f"Updated world model with {len(entities)} entities (no filtering)")
+                
+            return entities
+        except Exception as e:
+            logger.error(f"Error updating world model entities: {e}", exc_info=True)
+            return []
+
     def execute_goal(self, goal: str, max_steps: int = 15) -> Dict[str, Any]:
         logger.info(f"--- AgentCore Execution Started for goal: '{goal}' ---")
         self._send_status_update("task_start", {"command": goal})
@@ -109,6 +125,9 @@ class AgentCore:
                 final_message = "Failed to capture screen observation."
                 self._send_status_update("task_end", {"status": "failure", "message": final_message})
                 return {"status": "failure", "message": final_message}
+
+            # Update world model entities with perceptual filtering
+            self._update_world_model_entities(world_model, observation_image)
 
             self._send_status_update("tactic_before_image", {"image_np": observation_image})
 

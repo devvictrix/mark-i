@@ -39,7 +39,7 @@ ENV_SCHEMA: List[Dict[str, Any]] = [
         # --- FIX: Changed name to plural to match EnvConfig ---
         "name": "GEMINI_MODELS_PRO",
         "required": False,
-        "default": "gemini-1.5-pro-latest",
+        "default": "gemini-pro-latest",
         "type": _parse_str_list,
         "description": "Comma-separated list of models for high-level reasoning.",
     },
@@ -47,7 +47,7 @@ ENV_SCHEMA: List[Dict[str, Any]] = [
         # --- FIX: Changed name to plural to match EnvConfig ---
         "name": "GEMINI_MODELS_FLASH",
         "required": False,
-        "default": "gemini-1.5-flash-latest",
+        "default": "gemini-flash-latest",
         "type": _parse_str_list,
         "description": "Comma-separated list of models for fast, tactical execution.",
     },
@@ -55,7 +55,7 @@ ENV_SCHEMA: List[Dict[str, Any]] = [
         # --- FIX: Changed name to plural to match EnvConfig ---
         "name": "GEMINI_MODELS_NANO",
         "required": False,
-        "default": "gemini-2.0-flash-lite",
+        "default": "gemini-flash-lite-latest",
         "type": _parse_str_list,
         "description": "Comma-separated list of lightweight models for simple parsing tasks.",
     },
