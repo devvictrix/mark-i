@@ -1,123 +1,172 @@
-# MARK-I: The Genesis Core - An AI-Powered Visual Automation Agent
+# MARK-I: The Symbiotic AI Desktop Assistant
 
-![Python Version](https://img.shields.io/badge/Python-3.9+-blue.svg)![License](https://img.shields.io/badge/License-Proprietary-red.svg)![Status](https://img.shields.io/badge/Status-v18.0.0%20Stable-brightgreen)
-
-**MARK-I is an intelligent, proactive desktop assistant that uses Google Gemini to see, understand, and interact with any Graphical User Interface (GUI). This project serves as a demonstration of advanced AI agent architecture, moving beyond simple automation to learn from its environment, generate its own tasks to assist the user, and execute complex, multi-step goals from a single natural language command.**
+**_An AI-powered visual automation agent that sees, understands, and interacts with any GUI, learning from its environment to proactively assist you._**
 
 ---
 
-### **► Visual Demonstration**
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Version](https://img.shields.io/badge/version-18.0.0-blue)
+![Python Version](https://img.shields.io/badge/python-3.9+-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-*(**Action Required:** Record a short video of the "Interactive Command" mode in action, for example, telling it "Open Notepad and type 'Hello World'". Convert this video to a GIF and replace the placeholder below.)*
+MARK-I is an intelligent desktop assistant powered by AI that transcends traditional automation. By leveraging Google Gemini, it can **see, understand, and interact** with any Graphical User Interface (GUI). MARK-I is not merely a tool that follows commands; it's a cognitive partner that learns from its user's environment, anticipates needs, and executes complex, multi-step tasks from a single natural language command.
 
-![MARK-I Demo GIF](https://user-images.githubusercontent.com/username/repo/your-demo.gif)
-*In this demo, MARK-I is given a high-level goal and autonomously executes the required UI interactions.*
+## The Problem
 
----
+As our work on computers becomes increasingly complex, automation tools have remained rudimentary. They cannot adapt to UI changes, understand the context of complex tasks, or learn from their mistakes. This creates a "capability gap" that leaves users performing tedious, repetitive, and time-consuming work.
 
-## Vision & Core Features
+## Our Vision: Your J.A.R.V.I.S. for the Desktop
 
-The vision for MARK-I is to create a true cognitive partner—a "J.A.R.V.I.S. for your desktop"—that can anticipate needs and optimize workflows. Its advanced **Eye-Brain-Hand** architecture enables a powerful set of features:
+We built MARK-I to be an exceptionally intelligent and adaptive assistant—a J.A.R.V.I.S. for the desktop. It works seamlessly with you, learns from your behavior, and continuously grows its own capabilities. Our ultimate vision is a perfect partnership between human and AI, unlocking a new level of productivity and creativity.
 
-### 👁️ **Enhanced Vision System (The Eye)**
--   **🎯 Focused Context Execution:** MARK-I intelligently identifies target application windows and focuses its vision only on relevant areas, dramatically increasing speed, accuracy, and cost-efficiency.
--   **🖼️ Smart Visual Processing:** Automatically crops screenshots to application boundaries, reducing API costs and processing time while eliminating desktop distractions.
--   **📍 Precise Coordinate Translation:** Seamlessly converts relative coordinates from focused contexts to absolute screen positions for accurate interactions.
+*[ Placeholder for a GIF demonstrating MARK-I in action ]*
 
-### 🧠 **Intelligent Filtering System (The Brain)**
--   **🚫 Perceptual Filtering:** Users can teach MARK-I what visual elements to ignore (chat spam, UI decorations, notifications), allowing it to focus only on relevant screen content.
--   **🎯 Smart Entity Analysis:** AI automatically excludes ignored elements during screen analysis, improving accuracy and reducing visual noise.
--   **🛠️ Easy Management Interface:** Intuitive tools for managing ignore lists through the Knowledge Curator and dedicated management windows.
+## ✨ Core Capabilities
 
-### 🤚 **Precise Action System (The Hand)**
--   **🤖 Interactive Command Core:** Give MARK-I a direct command in plain English (e.g., "Level my character from 85 to 99 by hunting monsters"), and its `AgentCore` will use a **ReAct (Reason+Act) cognitive loop** to execute the task step-by-step.
--   **🧠 Proactive Agency Core:** When enabled, MARK-I passively observes the user's screen, identifies repetitive or inefficient actions based on its **Core Directives**, and proactively suggests automations for the user to approve.
--   **🔍 Knowledge Discovery & Memory:** MARK-I can learn about a specific user's environment, identifying key UI elements and data fields. This knowledge is curated by the user and stored in a persistent `knowledge_base.json`, making the AI more personalized and effective over time.
--   **💡 Self-Correcting Strategies:** The AI uses an **Objective-Strategy-Tactic (OST)** pattern. It learns and saves successful plans for goals. If a saved strategy fails due to a UI change, it can perform **self-correction** by generating a new plan on the fly.
--   **🧙 AI-Driven Profile Creator:** For complex, recurring tasks, an interactive wizard uses AI to help translate a high-level goal into a complete, reusable automation profile.
+MARK-I is built on a Hierarchical AI architecture, enabling advanced capabilities that set it apart from conventional tools:
 
-## For Developers & Hirers: Technical Deep Dive
+*   **🧠 Proactive Assistance (Agency Core):** MARK-I doesn't just wait for commands. It **proactively observes** the user's screen in the background. When it detects an opportunity to help (like a finished download or a repetitive task), it offers to automate it for you (with your confirmation).
+*   **🗣️ Natural Language Command (Agent Core):** It can take commands in plain English (e.g., "search for information about Mr. A from Google and Facebook") and uses a **ReAct (Reason+Act)** cognitive loop to plan and execute the task step-by-step until the goal is achieved.
+*   **💡 Self-Correction & Learning:** When a previously successful plan fails (e.g., due to a UI change), MARK-I can **analyze the situation and create a new plan** to complete the task. It learns and remembers the better, new plan for the future.
+*   **🔧 Self-Improvement via Tool Synthesis:** When faced with a problem it can't solve with its existing tools, the AI can **write its own new code** to create new tools, endlessly expanding its own capabilities.
+*   **🎯 Intelligent Focus & Efficiency (The Optimization Core):**
+    *   **Focused Context Execution:** The AI automatically "focuses" its vision on the relevant application window for a given task. This reduces the data it needs to process, making it **faster, more accurate, and more cost-effective**.
+    *   **Perceptual Filtering:** Users can teach the AI to "ignore" visual noise on the screen (like clock widgets or notifications), allowing it to concentrate only on what matters for the task.
+*   **💻 Deep System Awareness:** MARK-I possesses a deep understanding of the user's environment—from hardware specs and installed applications to the user's typical workflow patterns—enabling smarter decision-making.
 
-MARK-I is a demonstration of advanced software architecture, AI agent design, and a deep understanding of system integration.
+## 🏛️ Architecture Overview
 
-### Architectural Overview
+MARK-I uses an **Eye-Brain-Hand** paradigm, which clearly separates the AI's functions into distinct components, allowing for complex and flexible cognitive processing.
 
-The system is built on a **hierarchical Eye-Brain-Hand AI architecture** where different components handle distinct aspects of perception, cognition, and action:
+*   **Eye (Perception):** A multi-modal system for sensing the environment.
+*   **Brain (Cognition):** A hierarchical AI brain composed of an `Agency Core` (the strategist) and an `Agent Core` (the tactician).
+*   **Hand (Action):** A precise system for command execution and interaction with any GUI.
 
-#### 👁️ **The Eye (Vision System)**
--   **Focused Context Execution:** Intelligently detects and crops to target application windows
--   **Perceptual Filtering:** Filters out visual noise and distractions based on user-defined ignore lists
--   **Coordinate Translation:** Seamlessly handles relative-to-absolute coordinate conversion
-
-#### 🧠 **The Brain (Cognitive System)**
--   **Agency Core (The Strategist):** The highest level of thought. It operates proactively, observing the user and its environment via the `PerceptionEngine` to generate its own goals based on a set of core directives.
--   **Strategic Executor (The Planner):** When a goal is set (by the user or the Agency Core), this executor creates a high-level, multi-step plan. It leverages a `KnowledgeBase` to use learned strategies (Objectives) or generate new ones, performing self-correction if a plan fails.
--   **WorldModel:** Maintains structured understanding of UI entities with intelligent filtering capabilities.
-
-#### 🤚 **The Hand (Action System)**
--   **Agent Core (The Tactician):** This is the workhorse that executes plans. It operates on a **ReAct (Reason+Act)** loop, using its `Toolbelt` of capabilities (clicking, typing, etc.) to carry out one step at a time based on its real-time visual understanding of the screen.
--   **Toolbelt & Tools:** Comprehensive action execution system with visual element detection, typing, hotkeys, and synchronization tools.
--   **ActionExecutor:** Handles precise physical actions with coordinate offset support for focused contexts.
-
-This **Eye-Brain-Hand** separation enables highly complex, robust, and adaptive behavior perfect for gaming automation and complex desktop tasks.
-
-## 🎮 Perfect for Gaming Automation
-
-MARK-I's Eye-Brain-Hand architecture makes it ideal for complex gaming automation tasks:
-
-**Example Gaming Command:**
+```mermaid
+graph TB
+    subgraph "MARK-I Core Architecture"
+        subgraph "Cognitive Layer"
+            AC[Agency Core<br/>Strategic/Proactive]
+            AGC[Agent Core<br/>Tactical/Reactive]
+            SE[Strategic Executor<br/>Planning]
+        end
+        
+        subgraph "Processing Engines"
+            GE[Gemini Engine<br/>AI Analysis]
+            DE[Decision Engine<br/>Rule Processing]
+            PE[Primitive Executors<br/>Basic Actions]
+            TSE[Tool Synthesis Engine<br/>Self-Improvement]
+        end
+        
+        subgraph "Perception Layer"
+            CE[Capture Engine<br/>Visual Input]
+            PF[Perceptual Filter<br/>Focus & Attention]
+            VR[Visual Recognition<br/>Pattern Matching]
+        end
+        
+        subgraph "Action Layer"
+            AE[Action Executor<br/>GUI Interaction]
+            TB[Toolbelt<br/>Tool Management]
+            WM[World Model<br/>State Tracking]
+        end
+        
+        subgraph "Knowledge & Memory"
+            KB[Knowledge Base<br/>Learning & Memory]
+            ESC[Enhanced System Context<br/>Environment Awareness]
+            PM[Profile Manager<br/>Automation Profiles]
+        end
+        
+        subgraph "Interface Layer"
+            SI[Symbiosis Interface<br/>Human-AI Collaboration]
+            GUI[GUI Components<br/>Visual Interface]
+            CLI[CLI Interface<br/>Command Line]
+        end
+    
+    AC --> SE
+    AC --> AGC
+    SE --> AGC
+    AGC --> GE
+    AGC --> DE
+    AGC --> TB
+    GE --> TSE
+    CE --> PF
+    PF --> VR
+    VR --> AGC
+    AGC --> AE
+    AE --> WM
+    TB --> PE
+    KB --> AC
+    KB --> AGC
+    ESC --> AC
+    PM --> AGC
+    SI --> AC
+    SI --> AGC
 ```
-"Level my character from 85 to 99 by hunting Anolians in the Magma Dungeon. 
-Pick up all Anolian Cards, Immortal Hearts, and zeny. 
-When HP drops below 30%, use healing items."
-```
 
-**How MARK-I Executes This:**
-1. **👁️ Eye:** Detects and focuses on the game window, ignoring desktop distractions
-2. **🧠 Brain:** Filters out chat spam, UI decorations, and other visual noise you've taught it to ignore
-3. **🤚 Hand:** Executes precise game actions - clicking monsters, using skills, picking up items, healing when needed
+## 🛠️ Technology Stack
 
-## 🚀 Quick Start
+*   **Language:** Python 3.9+
+*   **AI/ML:** Google Gemini API (`gemini-1.5-pro`, `gemini-1.5-flash`)
+*   **GUI Framework:** CustomTkinter
+*   **Visual Perception:** Pillow, OpenCV, PyAutoGUI
+*   **UI Automation:** PyAutoGUI
+*   **Configuration:** JSON, python-dotenv
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Python 3.9+
-- Google Gemini API key
+
+*   Python 3.9+
+*   Google Gemini API Key
 
 ### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-repo/mark-i.git
+    cd mark-i
+    ```
+
+2.  **Create a virtual environment and install dependencies:**
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
+
+3.  **Configure your environment:**
+    *   Create a file named `.env` in the project root.
+    *   Add your Google Gemini API key to the file:
+        ```env
+        GEMINI_API_KEY="YOUR_API_KEY_HERE"
+        ```
+
+### Running the Application
+
+Launch the main Command & Control interface:
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd mark-i
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up your Gemini API key
-echo "GEMINI_API_KEY=your_api_key_here" > .env
-```
-
-### Running MARK-I
-```bash
-# Launch the GUI (recommended)
 python -m mark_i
-
-# Or run specific commands
-python -m mark_i [command] [options]
 ```
 
-### Technology Stack
+## 📈 Roadmap
 
-| Category              | Technology / Library                                                              |
-| --------------------- | --------------------------------------------------------------------------------- |
-| **Core Language**     | Python 3.9+                                                                       |
-| **AI & Machine Learning** | Google Gemini API (`gemini-1.5-pro`, `gemini-1.5-flash`)                            |
-| **GUI Framework**     | CustomTkinter                                                                     |
-| **Visual Perception** | Pillow, OpenCV, PyAutoGUI                                                         |
-| **UI Automation**     | PyAutoGUI                                                                         |
-| **Configuration**     | JSON, python-dotenv                                                               |
-| **Concurrency**       | `threading`, `queue`                                                              |
-| **Development**       | `pytest` (Testing), `black` (Formatting), `flake8` (Linting)                      |
+MARK-I has achieved its core architectural and performance goals. Our `vFuture` plans are focused on expanding its capabilities even further:
 
-## License
+*   **Multi-Application Workflows:** Orchestrate complex processes that span multiple different applications.
+*   **Voice Command Integration:** Enable more natural interaction through voice commands.
+*   **Task Scheduling:** Execute automations based on a predefined schedule.
+*   **Extensible Platform:** Create a Plugin and API system for third-party developers to build new tools and integrations.
 
-This is a proprietary software project. All rights are reserved by the copyright holder. Please see the [LICENSE](LICENSE) file for the full terms.
+## 🤝 Contributing
+
+We welcome developers and visionaries who are passionate about building the future of desktop automation. If you are interested in contributing, please read `CONTRIBUTING.md` (to be added) or open an Issue to share your ideas.
+
+## 📄 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+## 📞 Contact
+
+Interested in our vision? Want to discuss investment or partnership opportunities?
+*   **Project Lead:** Panupong Jaengaksorn
+*   **Email:** dev.victrix@gmail.com
